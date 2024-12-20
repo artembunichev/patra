@@ -26,9 +26,9 @@
 	<CreateVendor v-if="state.page === 'createVendor'" />
 	<CreateItem v-if="state.page === 'createItem'" />
 	<div v-if="state.page === 'main'">
-		<HiderItems :isInitiallyShown="false" />
-		<HiderHist :isInitiallyShown="false"/>
-		<HiderBuy :isInitiallyShown="false"/>
-		<HiderOrders :isInitiallyShown="false"/>
+		<HiderItems />
+		<HiderHist />
+		<HiderBuy />
+		<HiderOrders />
 	</div>
 </template>

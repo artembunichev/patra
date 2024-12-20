@@ -1,15 +1,9 @@
 <script setup>
-	import {useState} from "../../../state"
-	import Hider from "../../hider.vue"
-	
-	var props=defineProps(["isInitiallyShown"])
-	
-	var state = useState();
-	
+	import AppHider from "../../app-hider.vue"
 </script>
 
 <template>
-	<Hider title="Закупка" :isInitiallyShown="props.isInitiallyShown">
+	<AppHider id="buy" title="Закупка">
 		Список закупки...
-	</Hider>
+	</AppHider>
 </template>

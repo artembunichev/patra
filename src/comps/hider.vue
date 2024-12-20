@@ -2,22 +2,20 @@
 	import {useState} from "../state"
 	import {ref} from "@vue/reactivity"
 	
-	var props=defineProps(["isInitiallyShown", "title"])
+	var props=defineProps(["isShown", "title"])
+	var emit = defineEmits(["toggle"])
 	
-	var isShown = ref(props.isInitiallyShown ?? false)
-	var title = props.title
-	
-	function toggle() {
-		isShown.value = !isShown.value
+	function onToggle() {
+		emit("toggle", !props.isShown)
 	}
 	
 </script>
 
 <template>
 	<div>
-		{{ title }}
-		<button @click="toggle">Hide</button>
-		<div v-if="isShown">
+		{{ props.title }}
+		<button @click="onToggle">Hide</button>
+		<div v-if="props.isShown">
 			<slot></slot>
 		</div>
 	</div>

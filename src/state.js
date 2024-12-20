@@ -10,6 +10,17 @@ class State {
 	/* main or createVendor or createItem or createStore. */
 	page = "main"
 	
+	/*
+		whether or not a content of this particular
+		hider is visible.
+	*/
+	hiderStates = {
+		items: false,
+		hist: false,
+		buy: false,
+		orders: false, 
+	}
+	
 	stores=["СКЛАД1","СКЛАД2"];
 	addStore(name){
 		this.stores.push(name)

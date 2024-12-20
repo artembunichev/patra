@@ -6,7 +6,7 @@
 	*/
 		
 	import {useState} from "../../../state"
-	import Hider from "../../hider.vue"
+	import AppHider from "../../app-hider.vue"
 	import Item from "./item.vue"
 	import Search from "./search.vue"
 	
@@ -17,7 +17,7 @@
 </script>
 
 <template>
-	<Hider title="Товары" :isInitiallyShown="props.isInitiallyShown">
+	<AppHider id="items" title="Товары">
 		<div v-if="state.items.length===0">
 			Пока товаров нет...
 		</div>
@@ -32,5 +32,5 @@
 				/>
 			</div>
 		</div>
-	</Hider>
+	</AppHider>
 </template>
