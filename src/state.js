@@ -40,7 +40,14 @@ class State {
 				id: mkId()
 			}
 		)
-		console.log(this.items)
+	}
+	
+	deleteItem(id) {
+		this.items = this.items.filter(
+			({id: itemId})=> {
+				return itemId !== id
+			}
+		)
 	}
 	
 	getItemById(id) {
