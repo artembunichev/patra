@@ -34,20 +34,32 @@
 </script>
 
 <template>
-	<div>
-		<span>{{ name }}</span>
-		<button @click="confirmDeleteItem">УДАЛИТЬ</button>
-		<Confirm
-			v-if="isConfirmDeleteModalShown"
-			:prompt="`Ты реально хочешь удалить ${name}?`"
-			@yes="doDeleteItem"
-			@no="doNotDeleteItem"
-		/>
-	</div>
-	<div>Поставщик: {{ vendor }}</div>
-	<div>
-		<div v-for="(remainCount,store) in remain">
-			<span>{{ store }}: {{ remainCount }}шт.</span>
+	<div class="block">
+		<div>
+			<span>{{ name }}</span>
+			<button @click="confirmDeleteItem">УДАЛИТЬ</button>
+			<Confirm
+				v-if="isConfirmDeleteModalShown"
+				:prompt="`Ты реально хочешь удалить ${name}?`"
+				@yes="doDeleteItem"
+				@no="doNotDeleteItem"
+			/>
+		</div>
+		<div>Поставщик: {{ vendor }}</div>
+		<div>
+			<div v-for="(remainCount,store) in remain">
+				<span>{{ store }}: {{ remainCount }}шт.</span>
+			</div>
 		</div>
 	</div>
 </template>
+
+
+<style scoped>
+	.block {
+		border: 1px solid #000;
+		margin-bottom: 10px;
+		background-color: #b5b5b54f;
+		padding: 5px;
+	}
+</style>
