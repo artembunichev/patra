@@ -1,6 +1,7 @@
 <script setup>
 	import {useState} from "../../../state"
 	import Hider from "../../hider.vue"
+	import Item from "./item.vue"
 	
 	var props=defineProps(["isInitiallyShown", "title"])
 	
@@ -14,14 +15,12 @@
 			Пока товаров нет...
 		</div>
 		<div v-else v-for="item in state.items">
-			<div>название: {{ item.name }}</div>
-			<div>поставщик: {{ item.vendor }}</div>
-			<div>
-				осталось:
-				<div v-for="(remain,store) in item.remain">
-					<span>{{ store }}: {{ remain }}шт.</span>
-				</div>
-			</div>
+			<Item
+				:id="item.id"
+				:name="item.name"
+				:vendor="item.vendor"
+				:remain="item.remain"
+			/>
 		</div>
 	</Hider>
 </template>

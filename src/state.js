@@ -1,5 +1,6 @@
 import { makeFullReactive } from "vue-full-reactive"
 import {inject} from "vue"
+import {mkId} from "./lib/id"
 
 class State {
 	constructor(){
@@ -19,10 +20,31 @@ class State {
 		this.vendors.push(name)
 	}
 	
+	/*
+		item: {
+			name: string,
+			vendor: string
+			remain: {
+				<storage>: remainNumber,
+				...
+			},
+			id: string
+		}
+	*/
 	items=[];
 	addItem({name,vendor,remain}){
 		/*ADD CHECK FOR NAME.*/
-		this.items.push({name,vendor,remain})
+		this.items.push(
+			{
+				name,vendor,remain,
+				id: mkId()
+			}
+		)
+		console.log(this.items)
+	}
+	
+	getItemById(id) {
+		return this.items.find(({id: itemId}) => id == itemId)
 	}
 }
 
