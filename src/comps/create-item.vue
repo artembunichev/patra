@@ -1,22 +1,32 @@
 <script setup>
 	import Create from "./create.vue"
-	import {reactive,computed} from "vue"
+	import {ref, reactive} from "vue"
 	import {useState} from "../state"
 	
 	var state=useState()
-	var name=""
-	var vendor=""
 	
-	var remain = state.stores.reduce(
-		(acc, storeName)=> {
-			acc[storeName] = 0;
-			return acc
-		},
-		{}
-	)
+	var name=ref("")
+	var vendor=ref("")
+	var remain = reactive({})
+	
+	function reset() {
+		name.value=""
+		vendor.value=""
+		
+		remain = state.stores.reduce(
+			(acc, storeName)=> {
+				acc[storeName] = 0;
+				return acc
+			},
+			{}
+		)
+	}
+	
+	reset()
 	
 	var create =()=> {
-		state.addItem({name,vendor,remain})
+		state.addItem({name: name.value,vendor:vendor.value,remain})
+		reset()
 	}
 	
 </script>
