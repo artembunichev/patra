@@ -2,10 +2,10 @@
 	import CreateStore from "./comps/create-store.vue"
 	import CreateVendor from "./comps/create-vendor.vue"
 	import CreateItem from "./comps/create-item.vue"
-	import HiderItems from "./comps/hiders/items.vue"
-	import HiderHist from "./comps/hiders/hist.vue"
-	import HiderBuy from "./comps/hiders/buy.vue"
-	import HiderOrders from "./comps/hiders/orders.vue"
+	import HiderItems from "./comps/hiders/items/items.vue"
+	import HiderHist from "./comps/hiders/hist/hist.vue"
+	import HiderBuy from "./comps/hiders/buy/buy.vue"
+	import HiderOrders from "./comps/hiders/orders/orders.vue"
 	import {useState} from "./state"
 	
 	var state=useState()

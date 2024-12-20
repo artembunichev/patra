@@ -1,6 +1,6 @@
 <script setup>
-	import {useState} from "../../state"
-	import Hider from "../hider.vue"
+	import {useState} from "../../../state"
+	import Hider from "../../hider.vue"
 	
 	var props=defineProps(["isInitiallyShown"])
 	
