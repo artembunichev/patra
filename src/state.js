@@ -46,6 +46,23 @@ class State {
 	getItemById(id) {
 		return this.items.find(({id: itemId}) => id == itemId)
 	}
+	
+	
+	/*helps to compute a `filteredItems`.*/
+	searchPattern = ""
+	
+	/*
+		there are items, which are shown in the
+		items hider, because it contains a search bar.
+	*/
+	get filteredItems() {
+		return this.items.filter(
+			({name})=> {
+				var regex = new RegExp(this.searchPattern)
+				return name.match(regex)
+			}
+		)
+	}
 }
 
 export var state=new State;
