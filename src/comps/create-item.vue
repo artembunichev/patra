@@ -32,10 +32,9 @@
 </script>
 
 <template>
-	<div>------------- CREATE ITEM BEGINING --------------</div>
-	<div>
+	<h2>
 		Создать товар
-	</div>
+	</h2>
 	<div>
 		<input v-model="name" />
 	</div>
@@ -52,5 +51,4 @@
 	</div>
 	<button @click="create">СОЗДАТЬ ТОВАР!</button>
 	<button @click="state.page = 'main'">На главную</button>
-	<div>------------- CREATE ITEM END --------------</div>
 </template>
