@@ -38,6 +38,8 @@
 	}
 	
 	var doCreate = ()=> {
+		val.value = val.value.trim()
+		
 		if (!props.checkForSameName(val.value)) {
 			throwError(props.getSameNameErrorText(val.value))
 			return

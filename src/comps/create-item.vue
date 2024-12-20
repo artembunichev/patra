@@ -43,6 +43,8 @@
 	}
 	
 	var create =()=> {
+		name.value = name.value.trim()
+		
 		if (!state.validateItemName(name.value)) {
 			throwError(
 				`Запчасть с названием "${name.value}"`
