@@ -37,8 +37,12 @@
 		errorText.value = ""
 	}
 	
-	var doCreate = ()=> {
+	var normalizeValue = ()=> {
 		val.value = val.value.trim()
+	}
+	
+	var doCreate = ()=> {
+		normalizeValue()
 		
 		if (!props.checkForSameName(val.value)) {
 			throwError(props.getSameNameErrorText(val.value))
@@ -53,7 +57,10 @@
 
 <template>
 	<div>Создать {{ props.target  }}</div>
-	<input v-model="val" />
+	<input
+		v-model="val"
+		@blur="normalizeValue"
+	/>
 	<button @click="doCreate">Создать</button>
 	<button @click="state.page = 'main'">На главную</button>
 	<Err

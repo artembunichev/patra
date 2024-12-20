@@ -42,8 +42,12 @@
 		errText.value = "";
 	}
 	
-	var create =()=> {
+	var normalizeName = ()=> {
 		name.value = name.value.trim()
+	}
+	
+	var create =()=> {
+		normalizeName()
 		
 		if (!state.validateItemName(name.value)) {
 			throwError(
@@ -64,7 +68,10 @@
 		Создать товар
 	</h2>
 	<div>
-		<input v-model="name" />
+		<input
+			v-model="name"
+			@blur="normalizeName"
+		/>
 	</div>
 	<div>
 		<select v-model="vendor">
