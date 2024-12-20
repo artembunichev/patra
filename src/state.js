@@ -15,9 +15,27 @@ class State {
 		this.stores.push(name)
 	}
 	
+	/*see `validateItemName`.*/
+	validateStoreName(name) {
+		return this.stores.every(
+			(store)=> {
+				return store !== name
+			}
+		)
+	}
+	
 	vendors=["LEO","ART"];
 	addVendor(name){
 		this.vendors.push(name)
+	}
+	
+	/*see `validateItemName`.*/
+	validateVendorName(name) {
+		return this.vendors.every(
+			(vendor)=> {
+				return vendor !== name
+			}
+		)
 	}
 	
 	/*
@@ -33,11 +51,24 @@ class State {
 	*/
 	items=[];
 	addItem({name,vendor,remain}){
-		/*ADD CHECK FOR NAME.*/
 		this.items.push(
 			{
 				name,vendor,remain,
 				id: mkId()
+			}
+		)
+	}
+	
+	/*
+		check if this name for item was already taken.
+		
+		true -- name is OK,
+		false -- otherwise.
+	*/
+	validateItemName(name) {
+		return this.items.every(
+			(item)=> {
+				return item.name !== name
 			}
 		)
 	}
