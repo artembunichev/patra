@@ -4,18 +4,8 @@
 	
 	var props=defineProps([
 		"target",
-		/*
-			function for validating entered value
-			for redundancy.
-			an entered value is used as function parameter.
-		*/
-		"checkForSameName",
-		/*
-			function we will call in order to get
-			an error text for such a case.
-			it also takes a current value.
-		*/
-		"getSameNameErrorText"
+		"doValidate",
+		"doCreate",
 	])
 	var emit=defineEmits(["oncreate"])
 	
@@ -29,14 +19,12 @@
 	
 	var doCreate = ()=> {
 		normalizeValue()
-		
-		if (!props.checkForSameName(val.value)) {
-			state.setError(props.getSameNameErrorText(val.value))
+		if (!props.doValidate(val.value)) {
 			return
 		}
-		
-		emit("oncreate", val.value)
+		props.doCreate(val.value)
 		val.value = "";
+		emit("oncreate", val.value)
 	}
 	
 </script>

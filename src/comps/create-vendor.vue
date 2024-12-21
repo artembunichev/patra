@@ -2,21 +2,14 @@
 	import Create from "./create.vue"
 	import {useState} from "../state"
 	
-	var state=useState()
-	
-	var sameNameErr = (name)=> {
-		return `Поставщик под названием "${name}" уже существует.`
-	}
-	
+	var state=useState()	
 </script>
 
 <template>
-	<div>------------- CREATE VENDOR BEGINING --------------</div>
 	<Create
-		:checkForSameName="state.validateVendorName"
-		:getSameNameErrorText="sameNameErr"
-		@oncreate="(name)=>state.addVendor(name)"
+		:doValidate="state.validateVendorName"
+		:doCreate="state.addVendor"
+		@oncreate="create"
 		target="поставщика"
 	/>
-	<div>------------- CREATE VENDOR END --------------</div>
 </template>

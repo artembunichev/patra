@@ -56,11 +56,26 @@ class State {
 	
 	/*see `validateItemName`.*/
 	validateStoreName(name) {
-		return name !== "" && this.stores.every(
+		if (!name) {
+			this.setError(
+				`Не указано название для склада.`
+			)
+			return false
+		}
+		
+		var isNOTTaken = this.stores.every(
 			(store)=> {
 				return store !== name
 			}
 		)
+		
+		if (!isNOTTaken) {
+			this.setError(
+				`Склад с названием "${name}" уже существует.`
+			)
+		}
+		
+		return isNOTTaken
 	}
 	
 	/*************************************/
@@ -74,11 +89,26 @@ class State {
 	
 	/*see `validateItemName`.*/
 	validateVendorName(name) {
-		return name !== "" && this.vendors.every(
+		if (!name) {
+			this.setError(
+				"Не указано название для поставщика."
+			)
+			return false
+		}
+		
+		var isNOTTaken = this.vendors.every(
 			(vendor)=> {
 				return vendor !== name
 			}
 		)
+		
+		if (!isNOTTaken) {
+			this.setError(
+				`Поставщик с названием "${name}" уже существует.`
+			)
+		}
+		
+		return isNOTTaken
 	}
 	
 	/****************************************/
@@ -107,17 +137,34 @@ class State {
 	}
 	
 	/*
-		check if this name for item was already taken.
+		check passed item name for validity and show error
+		modals in case of errors.
 		
 		true -- name is OK,
 		false -- otherwise.
 	*/
 	validateItemName(name) {
-		return name !== "" && this.items.every(
+		if (!name) {
+			this.setError(
+				"Не указано название товара."
+			)
+			
+			return false
+		}
+		
+		var isNOTTaken = this.items.every(
 			(item)=> {
 				return item.name !== name
 			}
 		)
+		
+		if (!isNOTTaken) {
+			this.setError(
+				`Товар с названием "${name}" уже существует.`
+			)
+		}
+		
+		return isNOTTaken
 	}
 	
 	/*

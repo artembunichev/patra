@@ -32,10 +32,6 @@
 		normalizeName()
 		
 		if (!state.validateItemName(name.value)) {
-			state.setError(
-				`Запчасть с названием "${name.value}"`
-				+ " уже создана."
-			)
 			return
 		}
 		
