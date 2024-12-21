@@ -31,7 +31,16 @@
 	var create =()=> {
 		normalizeName()
 		
-		if (!state.validateItemName(name.value)) {
+		/* Validate the form. */
+		if (
+			!state.validateItemForm(
+				{
+					name: name.value,
+					vendor: vendor.value,
+					remain: remain
+				}
+			)
+		) {
 			return
 		}
 		
@@ -60,7 +69,10 @@
 	</div>
 	<div v-for="store in state.stores">
 		<span>{{ store }}:</span>
-		<input v-model="remain[store]" />
+		<input
+			type="number"
+			v-model="remain[store]"
+		/>
 	</div>
 	<button @click="create">СОЗДАТЬ ТОВАР!</button>
 	<button @click="state.page = 'main'">На главную</button>

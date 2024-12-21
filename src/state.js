@@ -136,6 +136,14 @@ class State {
 		)
 	}
 	
+	validateItemVendor(vendor) {
+		if (!vendor) {
+			this.setError("Не указан поставщик.")
+			return false
+		}
+		return true
+	}
+	
 	/*
 		check passed item name for validity and show error
 		modals in case of errors.
@@ -165,6 +173,43 @@ class State {
 		}
 		
 		return isNOTTaken
+	}
+	
+	/*
+		remain: {
+				<storage>: remainNumber,
+				...
+			}
+	*/
+	validateItemRemain(remain) {
+		var areAllNumbersPositive = (
+			Object.values(remain).every(
+				(remainNum)=> {
+					return remainNum >= 0
+				}
+			)
+		)
+		
+		if (!areAllNumbersPositive) {
+			this.setError("Кол-во остатков не может быть отрицательным.")
+		}
+		
+		return areAllNumbersPositive
+	}
+	
+	/*
+		takes: {
+			name: string
+			vendor: string
+			remain: Remain
+		}
+	*/
+	validateItemForm({name, vendor, remain}) {
+		return (
+			this.validateItemName(name)
+			&& this.validateItemVendor(vendor)
+			&& this.validateItemRemain(remain)
+		)
 	}
 	
 	/*
