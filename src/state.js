@@ -14,6 +14,7 @@ class State {
 		createStore
 		vendorList
 		storeList
+		storeMove
 	*/
 	page = "main"
 	
@@ -58,8 +59,28 @@ class State {
 	
 	/*list of store names.*/
 	stores=[];
+	
 	addStore(name){
 		this.stores.push(name)
+	}
+	
+	/*
+		move all items from store `from` to `to`.
+	*/
+	moveAllFromStore(from, to) {
+		if (from === to) {
+			this.setError(
+				`Склад отправки и склад назначения одинаковые ("${to}").`
+			)
+			return
+		}
+		
+		this.items.forEach(
+			(item)=> {
+				item.remain[to] += item.remain[from];
+				item.remain[from] = 0;
+			}
+		)
 	}
 	
 	/*see `validateItemName`.*/
