@@ -120,6 +120,38 @@ class State {
 		)
 	}
 	
+	/*
+		sets name to `newName` for item with id `id`.
+		validates it first and maybe shows error modal.
+		
+		returns `true` name was finally changed,
+		otherwise -- `false`.
+	*/
+	editItemName(id, newName) {
+		var isNameTaken = this.items.some(
+			(item)=> {
+				return (
+					item.id !== id
+					&& item.name === newName
+				)
+			}
+		)
+		if (isNameTaken) {
+			this.setError(
+				`Товар с названием ${newName} уже существует.`
+			)
+			return false
+		}
+		
+		var itemIdx = this.items.findIndex(
+			(item)=> item.id === id
+		)
+		
+		this.items[itemIdx].name = newName
+		
+		return true
+	}
+	
 	deleteItem(id) {
 		this.items = this.items.filter(
 			({id: itemId})=> {

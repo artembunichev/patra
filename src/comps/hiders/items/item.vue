@@ -31,12 +31,38 @@
 		closeConfirmDeleteItemModal()
 	}
 	
+	/************* Edit Name. *****************/
+	var isEditNameMode = ref(false)
+	var activateEditNameMode = ()=> {
+		isEditNameMode.value = true
+	}
+	var deactivateEditNameMode = ()=> {
+		isEditNameMode.value = false
+		editedName.value = props.name;
+	}
+	var editedName = ref(props.name);
+	
+	var tryChangeItemName = ()=> {
+		if (state.editItemName(props.id, editedName.value)) {
+			deactivateEditNameMode()
+		}
+	}
+	/*****************************************/
+	
 </script>
 
 <template>
 	<div class="block">
-		<div>
+		<div v-if="isEditNameMode">
+			<input
+				v-model="editedName"
+			/>
+			<button @click="tryChangeItemName">ОК</button>
+			<button @click="deactivateEditNameMode">ОТМ</button>
+		</div>
+		<div v-else>
 			<span>{{ name }}</span>
+			<button @click="activateEditNameMode">РЕД</button>
 			<button @click="confirmDeleteItem">УДАЛИТЬ</button>
 			<Confirm
 				v-if="isConfirmDeleteModalShown"
