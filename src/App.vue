@@ -3,6 +3,7 @@
 	import CreateVendor from "./comps/create-vendor.vue"
 	import CreateItem from "./comps/create-item.vue"
 	import VendorList from "./comps/vendor-list.vue"
+	import StoreList from "./comps/store-list.vue"
 	import HiderItems from "./comps/hiders/items/items.vue"
 	import HiderHist from "./comps/hiders/hist/hist.vue"
 	import HiderBuy from "./comps/hiders/buy/buy.vue"
@@ -27,10 +28,14 @@
 	<button @click="state.page = 'vendorList'">
 		Список поставщиков
 	</button>
+	<button @click="state.page = 'storeList'">
+		Список складов
+	</button>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />
 	<CreateItem v-if="state.page === 'createItem'" />
 	<VendorList v-if="state.page === 'vendorList'" />
+	<StoreList v-if="state.page === 'storeList'"/>
 	<div v-if="state.page === 'main'">
 		<HiderItems />
 		<HiderHist />

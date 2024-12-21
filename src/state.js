@@ -13,6 +13,7 @@ class State {
 		createItem
 		createStore
 		vendorList
+		storeList
 	*/
 	page = "main"
 	
@@ -56,7 +57,7 @@ class State {
 	/************** Stores. ****************/
 	
 	/*list of store names.*/
-	stores=["СКЛАД1","СКЛАД2"];
+	stores=[];
 	addStore(name){
 		this.stores.push(name)
 	}
@@ -83,6 +84,39 @@ class State {
 		}
 		
 		return isNOTTaken
+	}
+	
+	/*
+		how many items every particular store places accumulatively.
+		{
+			<store name>: <total number of items>
+		}
+	*/
+	get storeItemStats() {
+		if (!this.items.length) {
+			return this.stores.reduce(
+				(acc, store)=> {
+					acc[store] = 0
+					return acc
+				},
+				{}
+			)
+		}
+		
+		return this.items.reduce(
+			(acc, {remain})=> {
+				Object.keys(remain).forEach(
+					(store)=> {
+						if (acc[store] === undefined) {
+							acc[store] = 0
+						}
+						acc[store] += remain[store]
+					}
+				)
+				return acc
+			},
+			{}
+		)
 	}
 	
 	/*************************************/
