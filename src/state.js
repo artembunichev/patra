@@ -56,7 +56,7 @@ class State {
 	
 	/*see `validateItemName`.*/
 	validateStoreName(name) {
-		return this.stores.every(
+		return name !== "" && this.stores.every(
 			(store)=> {
 				return store !== name
 			}
@@ -74,7 +74,7 @@ class State {
 	
 	/*see `validateItemName`.*/
 	validateVendorName(name) {
-		return this.vendors.every(
+		return name !== "" && this.vendors.every(
 			(vendor)=> {
 				return vendor !== name
 			}
@@ -113,7 +113,7 @@ class State {
 		false -- otherwise.
 	*/
 	validateItemName(name) {
-		return this.items.every(
+		return name !== "" && this.items.every(
 			(item)=> {
 				return item.name !== name
 			}
@@ -128,6 +128,10 @@ class State {
 		otherwise -- `false`.
 	*/
 	editItemName(id, newName) {
+		if (newName === "") {
+			return false
+		}
+		
 		var isNameTaken = this.items.some(
 			(item)=> {
 				return (
