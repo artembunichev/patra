@@ -6,6 +6,7 @@
 	import HiderHist from "./comps/hiders/hist/hist.vue"
 	import HiderBuy from "./comps/hiders/buy/buy.vue"
 	import HiderOrders from "./comps/hiders/orders/orders.vue"
+	import Err from "./comps/err.vue"
 	import {useState} from "./state"
 	
 	var state=useState()
@@ -31,4 +32,9 @@
 		<HiderBuy />
 		<HiderOrders />
 	</div>
+	<Err
+		v-if="state.isError"
+		:text="state.errorText"
+		@close="state.clearError"
+	/>
 </template>

@@ -10,6 +10,29 @@ class State {
 	/* main or createVendor or createItem or createStore. */
 	page = "main"
 	
+	
+	/************** Errors. **************/
+	
+	isError = false
+	
+	/*will be shown in error modal window.*/
+	errorText = ""
+	
+	setError(cause) {
+		this.isError = true
+		this.errorText = cause
+	}
+	
+	clearError() {
+		this.isError = false
+		this.errorText = ""
+	}
+	
+	/************************************/
+	
+	
+	/************* Hiders. ****************/
+	
 	/*
 		whether or not a content of this particular
 		hider is visible.
@@ -20,6 +43,11 @@ class State {
 		buy: false,
 		orders: false, 
 	}
+	
+	/**************************************/
+	
+	
+	/************** Stores. ****************/
 	
 	stores=["СКЛАД1","СКЛАД2"];
 	addStore(name){
@@ -35,6 +63,10 @@ class State {
 		)
 	}
 	
+	/*************************************/
+	
+	
+	/************** Vendors. ****************/
 	vendors=["LEO","ART"];
 	addVendor(name){
 		this.vendors.push(name)
@@ -49,6 +81,10 @@ class State {
 		)
 	}
 	
+	/****************************************/
+	
+	
+	/*************** Items.  **************/
 	/*
 		item: {
 			name: string,
@@ -112,6 +148,8 @@ class State {
 			}
 		)
 	}
+	
+	/*********************************************/
 }
 
 export var state=new State;

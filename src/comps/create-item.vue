@@ -1,6 +1,5 @@
 <script setup>
 	import Create from "./create.vue"
-	import Err from "./err.vue"
 	import {ref, reactive} from "vue"
 	import {useState} from "../state"
 	
@@ -25,23 +24,6 @@
 	
 	reset()
 	
-	/*
-		text will be shown in error modal in case
-		of an error.
-	*/
-	var errText = ref("");
-	var isError = ref(false);
-	
-	var throwError = (cause)=> {
-		isError.value = true
-		errText.value = cause;
-	}
-	
-	var closeError = ()=> {
-		isError.value = false
-		errText.value = "";
-	}
-	
 	var normalizeName = ()=> {
 		name.value = name.value.trim()
 	}
@@ -50,7 +32,7 @@
 		normalizeName()
 		
 		if (!state.validateItemName(name.value)) {
-			throwError(
+			state.setError(
 				`Запчасть с названием "${name.value}"`
 				+ " уже создана."
 			)
@@ -86,9 +68,4 @@
 	</div>
 	<button @click="create">СОЗДАТЬ ТОВАР!</button>
 	<button @click="state.page = 'main'">На главную</button>
-	<Err
-		v-if="isError"
-		:text="errText"
-		@close="closeError"
-	/>
 </template>

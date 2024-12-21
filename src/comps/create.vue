@@ -1,7 +1,6 @@
 <script setup>
 	import {useState} from "../state"
 	import {ref} from "vue"
-	import Err from "./err.vue"
 	
 	var props=defineProps([
 		"target",
@@ -24,19 +23,6 @@
 	
 	var val=ref("")
 	
-	var isError = ref(false)
-	var errorText = ref("")
-	
-	var throwError = (cause)=> {
-		isError.value = true
-		errorText.value = cause
-	}
-	
-	var closeError = ()=> {
-		isError.value = false
-		errorText.value = ""
-	}
-	
 	var normalizeValue = ()=> {
 		val.value = val.value.trim()
 	}
@@ -45,7 +31,7 @@
 		normalizeValue()
 		
 		if (!props.checkForSameName(val.value)) {
-			throwError(props.getSameNameErrorText(val.value))
+			state.setError(props.getSameNameErrorText(val.value))
 			return
 		}
 		
@@ -63,9 +49,4 @@
 	/>
 	<button @click="doCreate">Создать</button>
 	<button @click="state.page = 'main'">На главную</button>
-	<Err
-		v-if="isError"
-		:text="errorText"
-		@close="closeError"
-	/>
 </template>
