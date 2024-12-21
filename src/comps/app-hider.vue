@@ -21,6 +21,6 @@
 		:title="title"
 		@toggle="onToggle"
 	>
-		<slot></slot>
+		<slot />
 	</Hider>
 </template>

@@ -16,7 +16,7 @@
 		{{ props.title }}
 		<button @click="onToggle">Hide</button>
 		<div v-if="props.isShown">
-			<slot></slot>
+			<slot />
 		</div>
 	</div>
 </template>

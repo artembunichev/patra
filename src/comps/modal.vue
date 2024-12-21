@@ -2,7 +2,7 @@
 	<Teleport to="body">
 		<div class="modal">
 			<div class="modal-block">
-				<slot></slot>
+				<slot />
 			</div>
 		</div>
 	</Teleport>
