@@ -9,7 +9,6 @@
 	<Create
 		:doValidate="state.validateStoreName"
 		:doCreate="state.addStore"
-		@oncreate="create"
 		target="cклад"
 	/>
 </template>

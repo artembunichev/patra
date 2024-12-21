@@ -9,7 +9,6 @@
 	<Create
 		:doValidate="state.validateVendorName"
 		:doCreate="state.addVendor"
-		@oncreate="create"
 		target="поставщика"
 	/>
 </template>
