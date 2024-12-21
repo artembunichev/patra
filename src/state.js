@@ -62,6 +62,41 @@ class State {
 	
 	addStore(name){
 		this.stores.push(name)
+		this.addRecordAboutStoreInItems(name)
+	}
+	
+	/*
+		when we create a new store, we want to add
+		an info about it for every item was created
+		before this store exists.
+	*/
+	addRecordAboutStoreInItems(store) {
+		this.items.forEach(
+			(item)=> {
+				item.remain[store] = 0
+			}
+		)
+	}
+	
+	deleteStore(name) {
+		this.stores = this.stores.filter(
+			(store)=> {
+				return store !== name
+			}
+		)
+		this.removeRecordsAboutDeletedStore(name)
+	}
+	
+	/*
+		we want to clean all the traces of deleted
+		store that linger around in the item's `remain` object.
+	*/
+	removeRecordsAboutDeletedStore(store) {
+		this.items.forEach(
+			(item)=> {
+				delete item.remain[store]
+			}
+		)
 	}
 	
 	/*
