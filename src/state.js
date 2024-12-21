@@ -88,6 +88,52 @@ class State {
 	}
 	
 	/*
+		rename the store from `from` to `to`.
+		
+		returns boolean depending on whether or
+		not the rename operation was success.
+	*/
+	renameStore(from, to) {
+		if (from === to) {
+			return true
+		}
+		
+		var nameWasAlreadyTaken = this.stores.some(
+			(store)=> {
+				return store === to
+			}
+		)
+		
+		if (nameWasAlreadyTaken) {
+			this.setError(
+				`Нельзя переименовать склад "${from}" в "${to}" - `
+				+ `склад "${to}" уже существует. Может, ты хотел `
+				+ `переместить товары со склада "${from}" на "${to}"?`
+			)
+			return false
+		}
+		
+		/*Actual renaming.*/
+		for (var i = 0; i<this.stores.length;++i) {
+			if (this.stores[i] === from) {
+				this.stores[i] = to
+				break;
+			}
+		}
+		
+		/*and also update store name in every item.*/
+		this.items.forEach(
+			(item)=> {
+				var remainInFrom = item.remain[from]
+				delete item.remain[from]
+				item.remain[to] = remainInFrom
+			}
+		)
+		
+		return true
+	}
+	
+	/*
 		we want to clean all the traces of deleted
 		store that linger around in the item's `remain` object.
 	*/

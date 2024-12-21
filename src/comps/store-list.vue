@@ -39,6 +39,50 @@
 		closeDeleteConfirm()
 	}
 	
+	
+	/*
+		this is a name of current store under editing.
+		"" if no stores are edited right now.
+		
+		it's also an original name of a store.
+	*/
+	var editModeForStore = ref("")
+	
+	/*
+		value in input of edited store.
+		
+		it's a new name for a store.
+	*/
+	var editedStoreValue = ref("")
+	
+	var activateEditMode = (store)=> {
+		editModeForStore.value = store
+		editedStoreValue.value = store
+	}
+	var quitEditMode = ()=> {
+		editModeForStore.value = ""
+		editedStoreValue.value = ""
+	}
+	
+	var normalizeEditedStoreValue = ()=> {
+		editedStoreValue.value = editedStoreValue.value.trim()
+	}
+	
+	var tryToRenameStore = ()=> {
+		normalizeEditedStoreValue()
+		
+		var isRenameSuccess = state.renameStore(
+			/*from.*/
+			editModeForStore.value,
+			/*to.*/
+			editedStoreValue.value
+		)
+		
+		if (isRenameSuccess) {
+			quitEditMode()
+		}
+	}
+	
 </script>
 
 <template>
@@ -48,9 +92,22 @@
 		<ul>
 			<li v-for="(totalItems, store) in state.storeItemStats">
 				<div>
-					{{ store }}: {{ totalItems }} {{ plurItem(totalItems) }}.
+					<div>
+						<span v-if="editModeForStore !== store">
+							{{ store }}
+						</span>
+						<span v-else>
+							<input
+								v-model="editedStoreValue"
+								@blur="normalizeEditedStoreValue"
+							/>
+							<button @click="tryToRenameStore">ОК</button>
+						</span>
+						: {{ totalItems }} {{ plurItem(totalItems) }}.
+					</div>
+					<button @click="confirmDelete(store)">УДАЛИТЬ</button>
+					<button @click="activateEditMode(store)">ИЗМ</button>
 				</div>
-				<button @click="confirmDelete(store)">УДАЛИТЬ</button>
 			</li>
 		</ul>
 		<Confirm
