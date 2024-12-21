@@ -1,5 +1,7 @@
 <script setup>
 	import {useState} from "../state"
+	import {plurItem} from "../lib/plur"
+	
 	var state=useState()
 </script>
 
@@ -8,7 +10,7 @@
 	<button @click="state.page = 'main'">На главную</button>
 	<ul v-if="state.vendors.length > 0">
 		<li v-for="(itemsNumber, vendor) in state.vendorItemStats">
-			{{ vendor }}: {{ itemsNumber }} товаров.
+			{{ vendor }}: {{ itemsNumber }} {{ plurItem(itemsNumber) }}.
 		</li>
 	</ul>
 	<div v-else>
