@@ -42,7 +42,12 @@
 	}
 	var editedName = ref(props.name);
 	
+	var normalizeEditedName = ()=> {
+		editedName.value = editedName.value.trim()
+	}
+	
 	var tryChangeItemName = ()=> {
+		normalizeEditedName()
 		if (state.editItemName(props.id, editedName.value)) {
 			deactivateEditNameMode()
 		}
@@ -56,6 +61,7 @@
 		<div v-if="isEditNameMode">
 			<input
 				v-model="editedName"
+				@blur="normalizeEditedName"
 			/>
 			<button @click="tryChangeItemName">ОК</button>
 			<button @click="deactivateEditNameMode">ОТМ</button>
