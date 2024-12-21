@@ -125,7 +125,7 @@ class State {
 	/************** Vendors. ****************/
 	
 	/*list of vendor names.*/
-	vendors=["LEO","ART"];
+	vendors=[];
 	
 	addVendor(name){
 		this.vendors.push(name)
@@ -281,7 +281,7 @@ class State {
 			remain: Remain
 		}
 	*/
-	validateItemForm({name, vendor, remain}) {
+	validateItemForm({name, vendor, remain}) {		
 		return (
 			this.validateItemName(name)
 			&& this.validateItemVendor(vendor)

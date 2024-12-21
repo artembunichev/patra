@@ -9,6 +9,14 @@
 	var vendor=ref("")
 	var remain = reactive({})
 	
+	var doWeHaveStores = state.stores.length > 0
+	var doWeHaveVendors = state.vendors.length > 0
+	
+	/*
+		whether or not the "create" button will be disabled.
+	*/
+	var isCreateAllowed = doWeHaveStores && doWeHaveVendors
+	
 	function reset() {
 		name.value=""
 		vendor.value=""
@@ -28,7 +36,7 @@
 		name.value = name.value.trim()
 	}
 	
-	var create =()=> {
+	var createItem =()=> {
 		normalizeName()
 		
 		/* Validate the form. */
@@ -54,26 +62,50 @@
 	<h2>
 		Создать товар
 	</h2>
+	
 	<div>
 		<input
 			v-model="name"
 			@blur="normalizeName"
 		/>
 	</div>
-	<div>
+	
+	<div v-if="doWeHaveVendors">
 		<select v-model="vendor">
 		<option v-for="vendor in state.vendors" :value="vendor">
 			{{ vendor }}
 		</option>
 		</select>
 	</div>
-	<div v-for="store in state.stores">
-		<span>{{ store }}:</span>
-		<input
-			type="number"
-			v-model="remain[store]"
-		/>
+	<div v-else>
+		Ещё нет созданных поставщиков.
+		<button @click="state.page = 'createVendor'">
+			Создать поставщика
+		</button>
 	</div>
-	<button @click="create">СОЗДАТЬ ТОВАР!</button>
+	
+	<div v-if="doWeHaveStores">
+		<div v-for="store in state.stores">
+			<span>{{ store }}:</span>
+			<input
+				type="number"
+				v-model="remain[store]"
+			/>
+		</div>
+	</div>
+	<div v-else>
+		Ещё нет созданных складов.
+		<button @click="state.page = 'createStore'">
+			Создать склад
+		</button>
+	</div>
+	
+	<button
+		:disabled="!isCreateAllowed"
+		@click="createItem"
+	>
+		СОЗДАТЬ ТОВАР!
+	</button>
+	
 	<button @click="state.page = 'main'">На главную</button>
 </template>
