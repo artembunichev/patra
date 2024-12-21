@@ -32,9 +32,6 @@
 	<button @click="state.page = 'storeList'">
 		Список складов
 	</button>
-	<button @click="state.page = 'storeMove'">
-		Перемещение по складам
-	</button>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />
 	<CreateItem v-if="state.page === 'createItem'" />

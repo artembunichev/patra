@@ -8,11 +8,19 @@
 <template>
 	<div class="title">Список складов</div>
 	<button @click="state.page = 'main'">На главную</button>
-	<ul v-if="state.stores.length > 0">
-		<li v-for="(totalItems, store) in state.storeItemStats">
-			{{ store }}: {{ totalItems }} {{ plurItem(totalItems) }}.
-		</li>
-	</ul>
+	<div v-if="state.stores.length > 0">
+		<ul>
+			<li v-for="(totalItems, store) in state.storeItemStats">
+				{{ store }}: {{ totalItems }} {{ plurItem(totalItems) }}.
+			</li>
+		</ul>
+		<button
+			v-if="state.stores.length > 1"
+			@click="state.page = 'storeMove'"
+		>
+			Перемещение по складам
+		</button>
+	</div>
 	<div v-else>
 		Складов пока нет...
 		<button @click="state.page = 'createStore'">
