@@ -7,7 +7,13 @@ class State {
 		return makeFullReactive(this)
 	}
 	
-	/* main or createVendor or createItem or createStore. */
+	/*
+		main
+		createVendor
+		createItem
+		createStore
+		vendorList
+	*/
 	page = "main"
 	
 	
@@ -49,6 +55,7 @@ class State {
 	
 	/************** Stores. ****************/
 	
+	/*list of store names.*/
 	stores=["СКЛАД1","СКЛАД2"];
 	addStore(name){
 		this.stores.push(name)
@@ -82,12 +89,19 @@ class State {
 	
 	
 	/************** Vendors. ****************/
+	
+	/*list of vendor names.*/
 	vendors=["LEO","ART"];
+	
 	addVendor(name){
 		this.vendors.push(name)
 	}
 	
-	/*see `validateItemName`.*/
+	/*
+		see `validateItemName`.
+		
+		this method is used for vendor-create form only.
+	*/
 	validateVendorName(name) {
 		if (!name) {
 			this.setError(
@@ -109,6 +123,35 @@ class State {
 		}
 		
 		return isNOTTaken
+	}
+	
+	/*
+		how much items are provided by vendors.
+		{
+			<vendor>: <number of items>
+		}
+	*/
+	get vendorItemStats() {
+		if (!this.items.length) {
+			return this.vendors.reduce(
+				(acc, vendor)=> {
+					acc[vendor] = 0;
+					return acc;
+				},
+				{}
+			)
+		}
+		
+		return this.items.reduce(
+			(acc, {vendor})=> {
+				if (acc[vendor] === undefined) {
+					acc[vendor] = 0;
+				}
+				acc[vendor]++;
+				return acc;
+			},
+			{}
+		)
 	}
 	
 	/****************************************/
