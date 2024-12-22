@@ -16,6 +16,25 @@
 	
 	var isConfirmDeleteModalShown = ref(false)
 	
+	var checkForAbilityToDelte = ()=> {
+		var isSomeRemain = Object.keys(
+			props.remain
+		).some(
+			(store)=> {
+				return props.remain[store] > 0
+			}
+		)
+		
+		if (isSomeRemain) {
+			state.setError(
+				"Нельзя удалить товар - есть остатки."
+			)
+			return
+		}
+		
+		confirmDeleteItem()
+	}
+	
 	var confirmDeleteItem = ()=> {
 		isConfirmDeleteModalShown.value = true
 	}
@@ -118,7 +137,7 @@
 		<div v-else>
 			<span>{{ name }}</span>
 			<button @click="activateEditNameMode">РЕД</button>
-			<button @click="confirmDeleteItem">УДАЛИТЬ</button>
+			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>
 			<Confirm
 				v-if="isConfirmDeleteModalShown"
 				:prompt="`Ты реально хочешь удалить ${name}?`"
