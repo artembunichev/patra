@@ -6,6 +6,9 @@
 
 <template>
 	<div>
-		<input v-model="state.searchPattern"/>
+		<input
+			placeholder="Поиск"
+			v-model="state.searchPattern"
+		/>
 	</div>
 </template>
