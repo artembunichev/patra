@@ -306,6 +306,7 @@ class State {
 		}
 	*/
 	items=[];
+	
 	addItem({name,vendor,remain}){
 		this.items.push(
 			{
@@ -423,6 +424,26 @@ class State {
 		)
 		
 		this.items[itemIdx].name = newName
+		
+		return true
+	}
+	
+	/*
+		returns the status of operation success.
+	*/
+	editItemRemain(itemId, store, newRemain) {
+		var item = this.getItemById(itemId)
+		
+		if (newRemain < 0) {
+			this.setError(
+				"Остаток не может быть отрицательным ("
+				+ `попытка записать значение ${newRemain}).`
+			)
+			return false
+		}
+		
+		/*since `item` is object, then it points to actual record.*/
+		item.remain[store] = newRemain
 		
 		return true
 	}
