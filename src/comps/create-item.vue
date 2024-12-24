@@ -56,6 +56,13 @@
 		reset()
 	}
 	
+	var handleKeypress = (e)=> {
+		/*Enter key.*/
+		if (e.keyCode == 13) {
+			createItem()
+		}
+	}
+	
 </script>
 
 <template>
@@ -67,6 +74,7 @@
 		<input
 			v-model="name"
 			@blur="normalizeName"
+			@keypress="handleKeypress"
 		/>
 	</div>
 	

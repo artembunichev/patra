@@ -27,6 +27,13 @@
 		emit("oncreate", val.value)
 	}
 	
+	var handleKeypress = (e)=> {
+		/*Enter key.*/
+		if (e.keyCode == 13) {
+			doCreate()
+		}
+	}
+	
 </script>
 
 <template>
@@ -34,6 +41,7 @@
 	<input
 		v-model="val"
 		@blur="normalizeValue"
+		@keypress="handleKeypress"
 	/>
 	<button @click="doCreate">Создать</button>
 	<button @click="state.page = 'main'">На главную</button>
