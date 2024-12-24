@@ -457,6 +457,10 @@ class State {
 			diff: diff
 		})
 		
+		if (diff < 0) {
+			this.addItemToBuyList(itemId, -diff)
+		}
+		
 		return true
 	}
 	
@@ -522,6 +526,92 @@ class State {
 	}
 	
 	/*********************************************/
+	
+	
+	/**************  Buy List. **************/
+	
+	/*
+		has a structure like:
+			{
+				**
+					we can get a vendor name from item (by id),
+					so we don't need to store is as a field.
+				**
+				<item_id>: count
+			}
+	*/
+	buyList = {}
+	
+	get actualBuyListKeys() {	
+		var excl = [
+			"__defineGetter__",
+			"__defineSetter__",
+			"hasOwnProperty",
+			"__lookupGetter__",
+			"__lookupSetter__",
+			"isPrototypeOf",
+			"propertyIsEnumerable",
+			"toString",
+			"valueOf",
+			"toLocaleString",
+			"constructor"
+		]
+		return Object.keys(this.buyList)
+			.filter(
+				(k)=> excl.every(e => e!==k)
+			)
+	}
+	
+	addItemToBuyList(itemId, diff) {
+		if (this.buyList[itemId] === undefined) {
+			this.buyList[itemId] = 0
+		}
+		
+		var oldCount = this.buyList[itemId]
+		var newCount = oldCount + diff
+		
+		if (newCount === 0) {
+			this.removeItemFromBuyList(itemId)
+			return
+		}
+		
+		this.buyList[itemId] = newCount
+	}
+	
+	removeItemFromBuyList(itemId) {
+		delete this.buyList[itemId]
+	}
+	
+	/*
+		returns a structure like:
+			{
+				<vendor_name>: {
+					<item_id>: count
+				}
+			}
+		
+		it's easier to render having structure like this,
+		than one as pure `buyList`.
+	*/
+	get buyListByVendors() {
+		return this.actualBuyListKeys
+			.reduce(
+				(acc, itemId)=> {
+					var item = this.getItemById(itemId)
+					
+					if (acc[item.vendor] === undefined) {
+						acc[item.vendor] = {}
+					}
+					
+					acc[item.vendor][itemId] = this.buyList[itemId]
+					return acc
+				},
+				{}
+			)
+	}
+	
+	/****************************************/
+	
 }
 
 export var state=new State;
