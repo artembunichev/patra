@@ -76,6 +76,13 @@
 			deactivateEditNameMode()
 		}
 	}
+	
+	var handleEditedNameKeypress = (e)=> {
+		/* Enter key. */
+		if (e.keyCode == 13) {
+			tryChangeItemName()
+		}
+	}
 	/*****************************************/
 	
 	
@@ -130,6 +137,7 @@
 			<input
 				v-model="editedName"
 				@blur="normalizeEditedName"
+				@keypress="handleEditedNameKeypress"
 			/>
 			<button @click="tryChangeItemName">ОК</button>
 			<button @click="deactivateEditNameMode">ОТМ</button>
