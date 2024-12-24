@@ -1,8 +1,11 @@
 <script setup>
 	import AppHider from "../../app-hider.vue"
 	import Hider from "../../hider.vue"
+	import ItemCounter from "../../item-counter.vue"
+	import Confirm from "../../confirm.vue"
 	import {useState} from "../../../state"
-	import {reactive} from "vue"
+	import {ref, reactive} from "vue"
+	
 	var state = useState()
 	
 	var vendorHidersState = reactive(
@@ -20,6 +23,67 @@
 		vendorHidersState[vendor] = value
 	}
 	
+	
+	/********* Item-counter. ***********/
+	
+	/*which item do we edit amount of.*/
+	var editRemainFor = ref("")
+	
+	var activateEditRemainMode = (id)=> {
+		editRemainFor.value = id
+	}
+	
+	var quitEditMode = ()=> {
+		editRemainFor.value = ""
+	}
+	
+	var tryToChangeRemain = (itemId, val)=> {
+		var isChangeSuccess = state.editBuyListItemCount(
+			itemId,
+			val
+		)
+		
+		if (isChangeSuccess) {
+			editRemainFor.value = ""
+		}
+		
+		closeDeletionConfirm()
+	}
+	
+	var tryToTryToChangeRemain = (itemId, val)=> {
+		if (val === 0) {
+			showDeletionConfirm(itemId)
+			return
+		}
+		
+		tryToChangeRemain(itemId, val)
+	}
+	
+	/***********************************/
+	
+	/****** Deletion Confirm. **********/
+	
+	var isDeletionConfirmShown = ref(false)
+	var deletionConfirmText = ref("")
+	var deletionConfirmId = ref("")
+	
+	var showDeletionConfirm = (itemId)=> {
+		isDeletionConfirmShown.value = 1
+		deletionConfirmId.value = itemId
+		var itemName= state.getItemById(deletionConfirmId.value).name
+		deletionConfirmText.value = (
+			`Это приведёт к удалению товара ${itemName}`
+			+" из закупки. Продолжить?"
+		)
+	}
+	
+	var closeDeletionConfirm = ()=> {
+		isDeletionConfirmShown.value = 0
+		deletionConfirmText.value = ""
+	}
+	
+	/***********************************/
+	
 </script>
 
 <template>
@@ -31,9 +95,16 @@
 					:title="vendor"
 					@toggle="(val)=> onVendorHiderToggle(vendor,val)"
 				>
-					<div v-for="(itemId) in Object.keys(state.buyListByVendors[vendor])">
-						<div>{{ state.getItemById(itemId).name }}</div>
-						<div>{{ state.buyListByVendors[vendor][itemId] }}</div>
+					<div v-for="itemId in Object.keys(state.buyListByVendors[vendor])">
+						<ItemCounter
+							:id="itemId"
+							:title="state.getItemById(itemId).name"
+							:count="state.buyListByVendors[vendor][itemId]"
+							:tryToApply="tryToTryToChangeRemain"
+							:editRemainFor="editRemainFor"
+							@activateEditRemainMode="activateEditRemainMode"
+							@quitEditMode="quitEditMode"
+						/>
 					</div>
 				</Hider>
 			</div>
@@ -41,5 +112,11 @@
 		<div v-else>
 			Список закупки пока пустует...
 		</div>
+		<Confirm
+			v-if="isDeletionConfirmShown"
+			:prompt="deletionConfirmText"
+			@yes="tryToChangeRemain(deletionConfirmId, 0)"
+			@no="closeDeletionConfirm"
+		/>
 	</AppHider>
 </template>

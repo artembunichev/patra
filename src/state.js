@@ -610,6 +610,23 @@ class State {
 			)
 	}
 	
+	editBuyListItemCount(itemId, count) {
+		if (count < 0) {
+			this.setError(
+				"Кол-во товаров не может быть меньше нуля."
+			)
+			return false
+		}
+		
+		if (count === 0) {
+			this.removeItemFromBuyList(itemId)
+			return true
+		}
+		
+		this.buyList[itemId] = count
+		return true
+	}
+	
 	/****************************************/
 	
 }
