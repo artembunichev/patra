@@ -1,4 +1,4 @@
-export function mkId(len=16) {
+export function mkId(len=10) {
 	var result = ""
 	var characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
