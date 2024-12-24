@@ -3,6 +3,7 @@
 	import {ref} from "vue"
 	import Hider from "../../hider.vue"
 	import Confirm from "../../confirm.vue"
+	import ItemCounter from "../../item-counter.vue"
 	
 	var props = defineProps([
 		"id",
@@ -91,39 +92,23 @@
 	/*for what store do we edit the remain value.*/
 	var editRemainFor = ref("")
 	
-	var editRemainValue = ref(0)
-	
-	var remainPlusValue = ref(1)
-	var remainMinusValue = ref(1)
-	
-	var activateEditRemainMode = (store)=> {
-		editRemainFor.value = store
-		editRemainValue.value = props.remain[store]
+	var activateEditRemainMode = (id)=> {
+		editRemainFor.value = id
 	}
 	
-	var quitRemainEditMode = ()=> {
+	var quitEditMode = ()=> {
 		editRemainFor.value = ""
-		editRemainValue.value = 0
-		remainPlusValue.value = 1
-		remainMinusValue.value = 1
 	}
 	
-	var applyRemainPlus = ()=> {
-		editRemainValue.value += remainPlusValue.value
-	}
-	var applyRemainMinus = ()=> {
-		editRemainValue.value -= remainMinusValue.value
-	}
-	
-	var tryToChangeRemain = ()=> {
+	var tryToChangeRemain = (storeId, val)=> {
 		var isChangeSuccess = state.editItemRemain(
 			props.id,
-			editRemainFor.value,
-			editRemainValue.value
+			storeId,
+			val
 		)
 		
 		if (isChangeSuccess) {
-			quitRemainEditMode()
+			editRemainFor.value = ""
 		}
 	}
 	
@@ -156,57 +141,15 @@
 		<div>Поставщик: {{ vendor }}</div>
 		<div>
 			<div v-for="(remainCount,store) in remain">
-				<div class="remain-container">
-					{{ store }}:
-					<div v-if="editRemainFor !== store">
-						<div>
-							{{ remainCount }}
-						</div>
-						<button @click="activateEditRemainMode(store)">
-							ИЗМ
-						</button>
-					</div>
-					<div v-else>
-						<div class="edit-remain-container">
-							<div class="edit-remain-control">
-								<button
-									class="edit-remain-button"
-									@click="applyRemainMinus"
-								>
-									-
-								</button>
-								<input
-									class="diff-input"
-									type="number"
-									min="0"
-									v-model="remainMinusValue"
-								/>
-							</div>
-							
-							<div class="edit-remain-value">
-								{{ editRemainValue }}
-							</div>
-							
-							<div class="edit-remain-control">
-								<button
-									class="edit-remain-button"
-									@click="applyRemainPlus"
-								>
-									+
-								</button>
-								<input
-									class="diff-input"
-									type="number"
-									min="0"
-									v-model="remainPlusValue"
-								/>
-							</div>
-							<button @click="tryToChangeRemain">
-								ОК
-							</button>
-						</div>
-					</div>
-				</div>
+				<ItemCounter
+					:id="store"
+					:title="store"
+					:count="remainCount"
+					:tryToApply="tryToChangeRemain"
+					:editRemainFor="editRemainFor"
+					@activateEditRemainMode="activateEditRemainMode"
+					@quitEditMode="quitEditMode"
+				/>
 			</div>
 		</div>
 	</div>
@@ -219,51 +162,5 @@
 		margin-bottom: 10px;
 		background-color: #b5b5b54f;
 		padding: 5px;
-	}
-	
-	.remain-container {
-		display: flex;
-		align-items: center;
-	}
-	
-	.edit-remain-container {
-		display: flex;
-		padding: 30px;
-	}
-	
-	.edit-remain-value {
-		font-size: 28px;
-		margin: 0 15px;
-	}
-	
-	.edit-remain-control {
-		position: relative;
-	}
-	
-	.edit-remain-button {
-		width: 25px;
-		height: 25px;
-		font-size: 18px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	
-	.diff-input {
-		width: 19px;
-		height: 19px;
-		font-size: 12px;
-		border: 1px dotted black;
-		position: absolute;
-		top: -27px;
-		left: 0;
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
 	}
 </style>
