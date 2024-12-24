@@ -2,6 +2,12 @@
 	import {ref,watch} from "vue"
 	
 	var props = defineProps([
+		/*
+			a uniq key for a component.
+			can't use "key" - it's reserved.
+		*/
+		"_key",
+		/*an id of an item/store.*/
 		"id",
 		"title",
 		"count",
@@ -20,7 +26,7 @@
 	var editRemainValue = ref(0)
 	
 	var activateEditRemainMode = ()=> {
-		emit("activateEditRemainMode", props.id)
+		emit("activateEditRemainMode", props._key)
 		editRemainValue.value = props.count
 	}
 	
@@ -55,7 +61,7 @@
 	watch(
 		()=> props.editRemainFor,
 		(newEditRemainFor)=> {
-			if (newEditRemainFor !== props.id) {
+			if (newEditRemainFor !== props._key) {
 				editRemainValue.value = 0
 				remainPlusValue.value = 1
 				remainMinusValue.value = 1
@@ -67,7 +73,7 @@
 <template>
 	<div class="remain-container">
 		{{ props.title }}:
-		<div v-if="props.editRemainFor !== props.id">
+		<div v-if="props.editRemainFor !== props._key">
 			<div>
 				{{ props.count }}
 			</div>

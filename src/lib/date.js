@@ -13,3 +13,14 @@ export function formatDate(date) {
 	var sec = zerofy(date.getSeconds())
 	return `${day}.${month}.${year} ${hour}:${min}:${sec}`
 }
+
+/*
+	returns a string: `<0d>.<0m>.<y>`.
+*/
+export function formatDateShort(date) {
+	var day = zerofy(date.getDate())
+	var month = zerofy(date.getMonth())
+	var year = date.getFullYear()
+	
+	return `${day}.${month}.${year}`
+}

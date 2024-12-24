@@ -1,7 +1,7 @@
 import { makeFullReactive } from "vue-full-reactive"
 import {inject} from "vue"
 import {mkId} from "./lib/id"
-import {formatDate} from "./lib/date"
+import {formatDate, formatDateShort} from "./lib/date"
 
 class State {
 	constructor(){
@@ -629,6 +629,102 @@ class State {
 	
 	/****************************************/
 	
+	
+	/*************** Orders. ****************/
+	
+	/*
+		a list of structures:
+		{
+			id: string
+			vendor: string
+			** ordered items (ids) and their count. **
+			items: {
+				<id>: count
+				...
+			}
+			** a string of a format: `<0d>.<0m>.<y>`. **
+			when: string
+			** whether or not an order is complete. **
+			status: boolean
+		}
+	*/
+	orders = []
+	
+	get ordersReversed() {
+		return this.orders.slice().reverse()
+	}
+	
+	/*		
+		we don't need to take a `status` 'cause it's
+		going to be `false` at the begining.
+		
+		`when` will be set here too,
+		
+		and `id` we also generate.
+	*/
+	makeAnOrder({vendor, items}) {
+		var when = formatDateShort(new Date())
+		
+		this.orders.push({
+			id: mkId(7),
+			vendor: vendor,
+			items: items,
+			when: when,
+			status: false,
+		})
+		
+		/*
+			It's important to delete these items
+			from buy list.
+		*/
+		Object.keys(items).forEach(
+			(itemId)=> {
+				this.removeItemFromBuyList(itemId)
+			}
+		)
+	}
+	
+	/*
+		takes order id.
+		actually, it's just like deleting an order.
+	*/
+	cancelAnOrder(id) {
+		this.orders = this.orders.filter(
+			(o)=> {
+				return o.id !== id
+			}
+		)
+	}
+	
+	/* order id as a parameter. */
+	completeTheOrder(id) {
+		var order = this.getOrderById(id)
+		
+		/* remember, `order` is a struct, so can modify it. */
+		order.status = true
+	}
+	
+	editOrderItemRemain(orderId, itemId, count) {
+		if (count < 0) {
+			this.setError(
+				"Кол-во товаров в заказе не может быть"
+				+ " меньше нуля."
+			)
+			return false
+		}
+		
+		const order = this.getOrderById(orderId)
+		
+		order.items[itemId] = count
+		
+		return true
+	}
+	
+	getOrderById(id) {
+		return this.orders.find(o => o.id === id)
+	}
+	
+	/****************************************/
 }
 
 export var state=new State;

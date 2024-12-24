@@ -43,20 +43,18 @@
 			val
 		)
 		
-		if (isChangeSuccess) {
-			editRemainFor.value = ""
-		}
-		
 		closeDeletionConfirm()
+		
+		return isChangeSuccess
 	}
 	
 	var tryToTryToChangeRemain = (itemId, val)=> {
 		if (val === 0) {
 			showDeletionConfirm(itemId)
-			return
+			return false
 		}
 		
-		tryToChangeRemain(itemId, val)
+		return tryToChangeRemain(itemId, val)
 	}
 	
 	/***********************************/
@@ -84,6 +82,33 @@
 	
 	/***********************************/
 	
+	
+	/********* Make an order. **********/
+	
+	var makeAnOrder = (vendor)=> {
+		var items = state.actualBuyListKeys.reduce(
+			(acc, itemId)=> {
+				var item = state.getItemById(itemId)
+				if (item.vendor === vendor) {
+					acc[itemId] = state.buyList[itemId]
+				}
+				return acc
+			},
+			{}
+		)
+		
+		state.makeAnOrder({
+			vendor: vendor,
+			items: items,
+		})
+	}
+	
+	/***********************************/
+	
+	var getItemCounterKey = (vendor, itemId)=> {
+		return `${vendor}+${itemId}`
+	}
+	
 </script>
 
 <template>
@@ -97,6 +122,7 @@
 				>
 					<div v-for="itemId in Object.keys(state.buyListByVendors[vendor])">
 						<ItemCounter
+							:_key="getItemCounterKey(vendor,itemId)"
 							:id="itemId"
 							:title="state.getItemById(itemId).name"
 							:count="state.buyListByVendors[vendor][itemId]"
@@ -107,6 +133,9 @@
 						/>
 					</div>
 				</Hider>
+				<button @click="makeAnOrder(vendor)">
+					Заказать
+				</button>
 			</div>
 		</div>
 		<div v-else>

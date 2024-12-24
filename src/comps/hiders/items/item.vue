@@ -100,16 +100,12 @@
 		editRemainFor.value = ""
 	}
 	
-	var tryToChangeRemain = (storeId, val)=> {
-		var isChangeSuccess = state.editItemRemain(
+	var tryToChangeRemain = (storeId, val)=> {		
+		return state.editItemRemain(
 			props.id,
 			storeId,
 			val
 		)
-		
-		if (isChangeSuccess) {
-			editRemainFor.value = ""
-		}
 	}
 	
 	/*******************************************/
@@ -159,6 +155,7 @@
 			<div v-for="(remainCount,store) in remain">
 				<ItemCounter
 					v-if="isExplicitStores ? true : remainCount > 0"
+					:_key="store"
 					:id="store"
 					:title="store"
 					:count="remainCount"
