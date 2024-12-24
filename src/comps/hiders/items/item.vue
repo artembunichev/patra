@@ -114,6 +114,17 @@
 	
 	/*******************************************/
 	
+	/**************  Explicit Stores. *************/
+	
+	/*whether or not do we want to show stores with 0 remain.*/
+	var isExplicitStores = ref(false)
+	
+	var toggleExplicitStores = ()=> {
+		isExplicitStores.value = !isExplicitStores.value
+	}
+	
+	/***********************************************/
+	
 </script>
 
 <template>
@@ -140,8 +151,14 @@
 		</div>
 		<div>Поставщик: {{ vendor }}</div>
 		<div>
+			<button
+				@click="toggleExplicitStores"
+			>
+				{{ isExplicitStores ? "🟢" : "👁️" }}
+			</button>
 			<div v-for="(remainCount,store) in remain">
 				<ItemCounter
+					v-if="isExplicitStores ? true : remainCount > 0"
 					:id="store"
 					:title="store"
 					:count="remainCount"
