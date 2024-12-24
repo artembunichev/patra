@@ -1,6 +1,7 @@
 import { makeFullReactive } from "vue-full-reactive"
 import {inject} from "vue"
 import {mkId} from "./lib/id"
+import {formatDate} from "./lib/date"
 
 class State {
 	constructor(){
@@ -442,8 +443,19 @@ class State {
 			return false
 		}
 		
+		var oldRemain = item.remain[store]
+		
 		/*since `item` is object, then it points to actual record.*/
 		item.remain[store] = newRemain
+		
+		var diff = newRemain - oldRemain
+		
+		this.histCommit({
+			when: new Date,
+			itemName: item.name,
+			store: store,
+			diff: diff
+		})
 		
 		return true
 	}
@@ -475,6 +487,38 @@ class State {
 				return name.match(regex)
 			}
 		)
+	}
+	
+	/***************** Hist. ***********************/
+	
+	/*
+		list of objects: {
+			**formatted string:
+			**	<day>.<mon>.<fullyear> <0h>:<0m>:<0sec>
+			when: string,
+			itemName: string,
+			store: string,
+			diff: number
+		}
+	*/
+	hist = []
+	
+	get histReversed() {
+		return this.hist.slice().reverse()
+	}
+	
+	/*
+		the same item structure as in `hist`, but
+		in `when` we pass the `Date` object and here
+		we format it.
+	*/
+	histCommit({when: date,itemName, store, diff}) {
+		this.hist.push({
+			when: formatDate(date),
+			itemName: itemName,
+			store: store,
+			diff: diff
+		})
 	}
 	
 	/*********************************************/
