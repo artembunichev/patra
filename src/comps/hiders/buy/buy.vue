@@ -66,7 +66,7 @@
 	var deletionConfirmId = ref("")
 	
 	var showDeletionConfirm = (itemId)=> {
-		isDeletionConfirmShown.value = 1
+		isDeletionConfirmShown.value = true
 		deletionConfirmId.value = itemId
 		var itemName= state.getItemById(deletionConfirmId.value).name
 		deletionConfirmText.value = (
@@ -76,7 +76,7 @@
 	}
 	
 	var closeDeletionConfirm = ()=> {
-		isDeletionConfirmShown.value = 0
+		isDeletionConfirmShown.value = false
 		deletionConfirmText.value = ""
 	}
 	
@@ -84,6 +84,24 @@
 	
 	
 	/********* Make an order. **********/
+	
+	var isOrderConfirmShown = ref(false)
+	var orderConfirmText = ref("")
+	var orderConfirmVendor = ref("")
+	
+	var showOrderConfirm = (vendor)=> {
+		isOrderConfirmShown.value = true
+		orderConfirmVendor.value = vendor
+		orderConfirmText.value = (
+			`Точно делаем заказ у поставщика ${vendor}?`
+		)
+	}
+	
+	var closeOrderConfirm = ()=> {
+		isOrderConfirmShown.value = false
+		orderConfirmVendor.value = ""
+		orderConfirmText.value = ""
+	}
 	
 	var makeAnOrder = (vendor)=> {
 		var items = state.actualBuyListKeys.reduce(
@@ -101,6 +119,8 @@
 			vendor: vendor,
 			items: items,
 		})
+		
+		closeOrderConfirm()
 	}
 	
 	/***********************************/
@@ -133,7 +153,7 @@
 						/>
 					</div>
 				</Hider>
-				<button @click="makeAnOrder(vendor)">
+				<button @click="showOrderConfirm(vendor)">
 					Заказать
 				</button>
 			</div>
@@ -146,6 +166,12 @@
 			:prompt="deletionConfirmText"
 			@yes="tryToChangeRemain(deletionConfirmId, 0)"
 			@no="closeDeletionConfirm"
+		/>
+		<Confirm
+			v-if="isOrderConfirmShown"
+			:prompt="orderConfirmText"
+			@yes="makeAnOrder(orderConfirmVendor)"
+			@no="closeOrderConfirm"
 		/>
 	</AppHider>
 </template>
