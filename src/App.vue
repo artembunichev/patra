@@ -5,14 +5,20 @@
 	import VendorList from "./comps/vendor-list.vue"
 	import StoreList from "./comps/store-list.vue"
 	import StoreMove from "./comps/store-move.vue"
+	import TempStore from "./comps/temp-store.vue"
 	import HiderItems from "./comps/hiders/items/items.vue"
 	import HiderHist from "./comps/hiders/hist/hist.vue"
 	import HiderBuy from "./comps/hiders/buy/buy.vue"
 	import HiderOrders from "./comps/hiders/orders/orders.vue"
 	import Err from "./comps/err.vue"
+	import {computed} from "vue"
 	import {useState} from "./state"
 	
 	var state=useState()
+	
+	var tempStoreLength = computed(
+		()=> state.tempStoreLength
+	)
 </script>
 
 <template>
@@ -32,12 +38,21 @@
 	<button @click="state.page = 'storeList'">
 		Список складов
 	</button>
+	<button @click="state.page = 'tempStore'">
+		<template v-if="tempStoreLength > 0">
+			Транизитный склад ({{ tempStoreLength }} товаров)
+		</template>
+		<template v-else>
+			Транзитный склад
+		</template>
+	</button>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />
 	<CreateItem v-if="state.page === 'createItem'" />
 	<VendorList v-if="state.page === 'vendorList'" />
 	<StoreList v-if="state.page === 'storeList'"/>
 	<StoreMove v-if="state.page === 'storeMove'"/>
+	<TempStore v-if="state.page === 'tempStore'"/>
 	<div v-if="state.page === 'main'">
 		<HiderItems />
 		<HiderHist />

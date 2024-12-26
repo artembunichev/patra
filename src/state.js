@@ -2,6 +2,7 @@ import { makeFullReactive } from "vue-full-reactive"
 import {inject} from "vue"
 import {mkId} from "./lib/id"
 import {formatDate, formatDateShort} from "./lib/date"
+import {actualKeys} from "./lib/obj"
 
 class State {
 	constructor(){
@@ -16,6 +17,7 @@ class State {
 		vendorList
 		storeList
 		storeMove
+		tempStore
 	*/
 	page = "main"
 	
@@ -570,24 +572,8 @@ class State {
 	*/
 	buyList = {}
 	
-	get actualBuyListKeys() {	
-		var excl = [
-			"__defineGetter__",
-			"__defineSetter__",
-			"hasOwnProperty",
-			"__lookupGetter__",
-			"__lookupSetter__",
-			"isPrototypeOf",
-			"propertyIsEnumerable",
-			"toString",
-			"valueOf",
-			"toLocaleString",
-			"constructor"
-		]
-		return Object.keys(this.buyList)
-			.filter(
-				(k)=> excl.every(e => e!==k)
-			)
+	get actualBuyListKeys() {
+		return actualKeys(this.buyList)	
 	}
 	
 	addItemToBuyList(itemId, diff) {
@@ -777,6 +763,68 @@ class State {
 	}
 	
 	/****************************************/
+	
+	
+	/********* Temporary Store. ***************/
+	
+	/*
+		This is a temporary (virtual) storage, where all the
+		items go after the order is complete.
+		
+		it's a structure like that:
+			{
+				<item_id>: amount
+				...
+			}
+		
+		this storage has a separated page, where
+		you can dispose this items across the real stores.
+		
+		items in it are NOT listed in `items` field,
+		so they would not appear in "items" page so to speak.
+	*/
+	tempStore = {}
+	
+	get actualTempStoreKeys() {
+		return actualKeys(this.tempStore)
+	}
+	
+	get tempStoreLength() {
+		return this.actualTempStoreKeys.length
+	}
+	
+	addItemToTempStore(itemId, amount) {
+		if (amount <= 0) {
+			return
+		}
+		
+		if (this.tempStore[itemId] === undefined) {
+			this.tempStore[itemId] = 0
+		}
+		this.tempStore[itemId] += amount
+	}
+	
+	/*
+		remove item from temp store and put it in a
+		particular real storage.
+	*/
+	disposeTempStoreItem(itemId, store) {
+		/*item from the `items`.*/
+		var realItem = this.getItemById(itemId)
+		if (!realItem) {
+			return
+		}
+		
+		var tmpAmount = this.tempStore[itemId]
+		if (tmpAmount === undefined) {
+			return
+		}
+		
+		/*`realItem` is a struct, so can edit it directly.*/
+		realItem.remain[store] += tmpAmount
+	}
+	
+	/******************************************/
 }
 
 export var state=new State;
