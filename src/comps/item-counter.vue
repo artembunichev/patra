@@ -1,22 +1,32 @@
 <script setup>
 	import {ref,watch} from "vue"
 	
-	var props = defineProps([
+	var props = defineProps({
 		/*
 			a uniq key for a component.
 			can't use "key" - it's reserved.
 		*/
-		"_key",
+		"_key": String,
 		/*an id of an item/store.*/
-		"id",
-		"title",
-		"count",
+		"id": String,
+		"title": String,
+		"count": Number,
 		/*
 			takes id and value.
 		*/
-		"tryToApply",
-		"editRemainFor",
-	])
+		"tryToApply": Function,
+		"editRemainFor": String,
+		/*
+			Optional.
+			
+			well, sometimes we want to
+			disable an opportunity for editing.
+		*/
+		"readOnly": {
+			type: Boolean,
+			default: false
+		},
+	})
 	
 	var emit = defineEmits([
 		"activateEditRemainMode",
@@ -77,7 +87,10 @@
 			<div>
 				{{ props.count }}
 			</div>
-			<button @click="activateEditRemainMode">
+			<button
+				v-if="!props.readOnly"
+				@click="activateEditRemainMode"
+			>
 				ИЗМ
 			</button>
 		</div>

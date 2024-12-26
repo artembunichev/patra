@@ -65,6 +65,8 @@
 	var cancelConfirmId = ref("")
 	
 	var showCancelConfirm = (orderId)=> {
+		quitEditMode()
+		
 		isCancelConfirmShown.value = true
 		cancelConfirmId.value = orderId
 		
@@ -118,6 +120,8 @@
 	}
 	
 	var maybeCompleteOrder = (orderId)=> {
+		quitEditMode()
+		
 		var order = state.getOrderById(orderId)
 		/*if the order is already completed - we do nothing.*/
 		if (order.status) {
@@ -141,6 +145,7 @@
 				>
 					<div v-for="itemId in Object.keys(order.items)">
 						<ItemCounter
+							:readOnly="order.status"
 							:_key="getItemCounterKey(order,itemId)"
 							:id="itemId"
 							:title="state.getItemById(itemId).name"
