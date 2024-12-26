@@ -45,6 +45,10 @@
 		
 		closeDeletionConfirm()
 		
+		if (isChangeSuccess) {
+			quitEditMode()
+		}
+		
 		return isChangeSuccess
 	}
 	

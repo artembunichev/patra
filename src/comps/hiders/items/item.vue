@@ -2,6 +2,7 @@
 	import {useState} from "../../../state"
 	import {ref} from "vue"
 	import Hider from "../../hider.vue"
+	import Modal from "../../modal.vue"
 	import Confirm from "../../confirm.vue"
 	import ItemCounter from "../../item-counter.vue"
 	
@@ -121,6 +122,50 @@
 	
 	/***********************************************/
 	
+	
+	/************ Add to Buy List. *****************/
+	
+	var isAddToBuyListError = ref(false)
+	
+	var showAddToBuyListError = ()=> {
+		isAddToBuyListError.value = true
+	}
+	var hideAddToBuyListError = ()=> {
+		isAddToBuyListError.value = false
+	}
+	
+	var isAddToBuyListModalShown = ref(false)
+	var addToBuyListAmount = ref(0)
+	
+	var showAddToBuyListModal = ()=> {
+		isAddToBuyListModalShown.value = true
+	}
+	var closeAddToBuyListModdal = ()=> {
+		isAddToBuyListModalShown.value = false
+		addToBuyListAmount.value = 0
+	}
+	/*when we manually exit it.*/
+	var leaveAddToBuyModal = ()=> {
+		hideAddToBuyListError()
+		closeAddToBuyListModdal()
+	}
+	
+	var addToBuyList = ()=> {
+		if (addToBuyListAmount.value < 0) {
+			showAddToBuyListError()
+			return
+		}
+		
+		hideAddToBuyListError()
+		state.addItemToBuyList(
+			props.id,
+			addToBuyListAmount.value
+		)
+		
+		closeAddToBuyListModdal()
+	}
+	
+	/***********************************************/
 </script>
 
 <template>
@@ -138,12 +183,35 @@
 			<span>{{ name }}</span>
 			<button @click="activateEditNameMode">РЕД</button>
 			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>
+			<button @click="showAddToBuyListModal">Z</button>
 			<Confirm
 				v-if="isConfirmDeleteModalShown"
 				:prompt="`Ты реально хочешь удалить ${name}?`"
 				@yes="doDeleteItem"
 				@no="doNotDeleteItem"
 			/>
+			<Modal
+				v-if="isAddToBuyListModalShown"
+			>
+				<div>
+					<div>Добавить {{ name }} в список закупки в кол-ве:</div>
+					<input
+						type="number"
+						v-model="addToBuyListAmount"
+					/>
+					<div
+						v-if="isAddToBuyListError"
+					>
+						Кол-во не может быть отрицательным
+					</div>
+					<button @click="addToBuyList">
+						Добавить
+					</button>
+					<button @click="leaveAddToBuyModal">
+						Назад
+					</button>
+				</div>
+			</Modal>
 		</div>
 		<div>Поставщик: {{ vendor }}</div>
 		<div>
