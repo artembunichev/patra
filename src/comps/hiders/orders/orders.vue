@@ -156,7 +156,7 @@
 					v-if="!order.status"
 					@click="showCancelConfirm(order.id)"
 				>
-					Отменить
+					🛇
 				</button>
 				<button @click="maybeCompleteOrder(order.id)">
 					{{ order.status ? "✔️" : "🚘" }}
