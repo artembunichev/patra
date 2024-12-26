@@ -1,6 +1,7 @@
 <script setup>
 	import AppHider from "../../app-hider.vue"
 	import Hider from "../../hider.vue"
+	import Confirm from "../../confirm.vue"
 	import ItemCounter from "../../item-counter.vue"
 	import {reactive,ref} from "vue"
 	import {useState} from "../../../state"
@@ -56,6 +57,37 @@
 	
 	/*************************************/
 	
+	
+	/**************** Cancel the order ************/
+	
+	var isCancelConfirmShown = ref(false)
+	var cancelConfirmText = ref("")
+	var cancelConfirmId = ref("")
+	
+	var showCancelConfirm = (orderId)=> {
+		isCancelConfirmShown.value = true
+		cancelConfirmId.value = orderId
+		
+		var order = state.getOrderById(orderId)
+		
+		cancelConfirmText.value = (
+			"Точно ОТМЕНЯЕМ заказ у поставщика"
+			+` ${order.vendor} (от ${order.when})?`
+		)
+	}
+	
+	var closeCancelConfirm = ()=> {
+		isCancelConfirmShown.value = false
+		cancelConfirmId.value = ""
+		cancelConfirmText.value = ""
+	}
+	
+	var doCancelOrder = (orderId)=> {
+		state.cancelOrder(orderId)
+		closeCancelConfirm()
+	}
+	
+	/**********************************************/
 </script>
 
 <template>
@@ -80,7 +112,16 @@
 						/>
 					</div>
 				</Hider>
+				<button @click="showCancelConfirm(order.id)">
+					Отменить
+				</button>
 			</div>
+			<Confirm
+				v-if="isCancelConfirmShown"
+				:prompt="cancelConfirmText"
+				@yes="doCancelOrder(cancelConfirmId)"
+				@no="closeCancelConfirm"
+			/>
 		</div>
 		<div v-else>
 			Заказов пока не было...

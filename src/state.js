@@ -694,12 +694,28 @@ class State {
 	
 	/*
 		takes order id.
-		actually, it's just like deleting an order.
+		actually, it doensn't delete the order as is, but
+		move all the items from it back to the buy
+		list (adding them to other items are possibly
+		in there already).
 	*/
-	cancelAnOrder(id) {
+	cancelOrder(id) {
+		var order = this.getOrderById(id)
+		
+		/*well, we do delete the order from order list.*/
 		this.orders = this.orders.filter(
 			(o)=> {
 				return o.id !== id
+			}
+		)
+		
+		/*and then put it back in buy list (all the items in it).*/
+		Object.keys(order.items).forEach(
+			(itemId)=> {
+				if (this.buyList[itemId] === undefined) {
+					this.buyList[itemId] = 0
+				}
+				this.buyList[itemId] += order.items[itemId]
 			}
 		)
 	}
