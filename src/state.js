@@ -650,8 +650,16 @@ class State {
 	*/
 	orders = []
 	
-	get ordersReversed() {
-		return this.orders.slice().reverse()
+	/*
+		first reverse the orders and the sort them
+		by `status` field - put uncompleted orders first.
+	*/
+	get ordersReversedAndSorted() {
+		return this.orders.slice().reverse().sort(
+			(a,b)=> {
+				return a.status - b.status
+			}
+		)
 	}
 	
 	/*		

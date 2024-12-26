@@ -61,7 +61,7 @@
 <template>
 	<AppHider id="orders" title="Заказы">
 		<div v-if="state.orders.length > 0">
-			<div v-for="order in state.ordersReversed">
+			<div v-for="order in state.ordersReversedAndSorted">
 				<Hider
 					:isShown="orderHidersState[order.id]"
 					:title="getHiderTitle(order)"
