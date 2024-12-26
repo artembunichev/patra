@@ -1,6 +1,6 @@
 <script setup>
 	import {useState} from "../../../state"
-	import {ref} from "vue"
+	import {ref,computed} from "vue"
 	import Hider from "../../hider.vue"
 	import Modal from "../../modal.vue"
 	import Confirm from "../../confirm.vue"
@@ -166,6 +166,14 @@
 	}
 	
 	/***********************************************/
+	
+	/******************* Amount in orders. ********/
+	
+	var amountInOrders = computed(
+		()=> state.getItemAmountInTheOrders(props.id)
+	)
+	
+	/**********************************************/
 </script>
 
 <template>
@@ -182,6 +190,11 @@
 		<div v-else>
 			<span>{{ props.name }}</span>
 			<div>{{ state.getItemTotalRemain(props.id) }}</div>
+			<div
+				v-if="amountInOrders > 0"
+			>
+				В пути {{ amountInOrders }}
+			</div>
 			<button @click="activateEditNameMode">РЕД</button>
 			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>
 			<button @click="showAddToBuyListModal">Z</button>

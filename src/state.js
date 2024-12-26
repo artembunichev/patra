@@ -487,6 +487,23 @@ class State {
 		)
 	}
 	
+	/*a total amount of this items amongst all the orders.*/
+	getItemAmountInTheOrders(id) {
+		return this.orders.reduce(
+			(acc, order)=> {
+				Object.keys(order.items).forEach(
+					(itemId)=> {
+						if (id === itemId) {
+							acc += order.items[itemId]
+						}
+					}
+				)
+				return acc
+			},
+			0
+		)
+	}
+	
 	
 	/*helps to compute a `filteredItems`.*/
 	searchPattern = ""
