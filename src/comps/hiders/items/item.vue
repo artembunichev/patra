@@ -180,7 +180,8 @@
 			<button @click="deactivateEditNameMode">ОТМ</button>
 		</div>
 		<div v-else>
-			<span>{{ name }}</span>
+			<span>{{ props.name }}</span>
+			<div>{{ state.getItemTotalRemain(props.id) }}</div>
 			<button @click="activateEditNameMode">РЕД</button>
 			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>
 			<button @click="showAddToBuyListModal">Z</button>

@@ -476,6 +476,17 @@ class State {
 		return this.items.find(({id: itemId}) => id == itemId)
 	}
 	
+	/*a total amount of items amongst all the store.*/
+	getItemTotalRemain(id) {
+		var item = this.getItemById(id)
+		return Object.keys(item.remain).reduce(
+			(acc,store)=> {
+				return acc += item.remain[store]
+			},
+			0
+		)
+	}
+	
 	
 	/*helps to compute a `filteredItems`.*/
 	searchPattern = ""
