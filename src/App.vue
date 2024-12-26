@@ -12,12 +12,13 @@
 	import HiderOrders from "./comps/hiders/orders/orders.vue"
 	import Err from "./comps/err.vue"
 	import {computed} from "vue"
+	import {plurItem} from "./lib/plur"
 	import {useState} from "./state"
 	
 	var state=useState()
 	
 	var tempStoreLength = computed(
-		()=> state.tempStoreLength
+		()=> state.tempStoreTotalLength
 	)
 </script>
 
@@ -39,12 +40,10 @@
 		Список складов
 	</button>
 	<button @click="state.page = 'tempStore'">
-		<template v-if="tempStoreLength > 0">
-			Транизитный склад ({{ tempStoreLength }} товаров)
-		</template>
-		<template v-else>
-			Транзитный склад
-		</template>
+		{{ tempStoreLength > 0
+			? `Транизитный склад (${tempStoreLength} ${plurItem(tempStoreLength)})`
+			: "Транзитный склад"
+		}}
 	</button>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />

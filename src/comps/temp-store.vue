@@ -9,10 +9,10 @@
 </script>
 
 <template>
-	<div v-if="Object.keys(state.tempStore) > 0">
+	<div v-if="state.actualTempStoreKeys.length > 0">
 		<div>Транзитный склад</div>
 		<div>
-			<div v-for="itemId in Object.keys(state.tempStore)">
+			<div v-for="itemId in state.actualTempStoreKeys">
 				{{ getItemName(itemId) }}: {{ state.tempStore[itemId] }}
 			</div>
 		</div>

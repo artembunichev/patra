@@ -739,12 +739,26 @@ class State {
 		)
 	}
 	
-	/* order id as a parameter. */
-	completeTheOrder(id) {
+	/*
+		we mark the order as completed and move
+		all the items (copy actually, they're still
+		in the order object) to the temporary storage
+		(see `tempStore`).
+	*/
+	completeOrder(id) {
 		var order = this.getOrderById(id)
 		
 		/* remember, `order` is a struct, so can modify it. */
 		order.status = true
+		
+		/*now put items in the temporary storage.*/
+		Object.keys(order.items).forEach(
+			(itemId)=> {
+				this.addItemToTempStore(
+					itemId, order.items[itemId]
+				)
+			}
+		)
 	}
 	
 	editOrderItemRemain(orderId, itemId, count) {
@@ -794,8 +808,14 @@ class State {
 		return actualKeys(this.tempStore)
 	}
 	
-	get tempStoreLength() {
-		return this.actualTempStoreKeys.length
+	/*an amount of all the items in the temp storage.*/
+	get tempStoreTotalLength() {
+		return this.actualTempStoreKeys.reduce(
+			(acc, itemId)=> {
+				return acc += this.tempStore[itemId]
+			},
+			0
+		)
 	}
 	
 	addItemToTempStore(itemId, amount) {

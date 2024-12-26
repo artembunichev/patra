@@ -88,6 +88,46 @@
 	}
 	
 	/**********************************************/
+	
+	/********** Complete The Order. ***************/
+	
+	var isCompleteConfirmShown = ref(false)
+	var completeConfirmText = ref("")
+	var completeConfirmId = ref("")
+	
+	var showCompleteConfirm = (orderId)=> {
+		isCompleteConfirmShown.value = true
+		var order = state.getOrderById(orderId)
+		completeConfirmText.value = (
+			"Принять заказ от поставщика"
+			+ ` ${order.vendor} (от ${order.when})?`
+		)
+		completeConfirmId.value = orderId
+	}
+	
+	var closeCompleteConfirm = ()=> {
+		isCompleteConfirmShown.value = false
+		completeConfirmText.value = ""
+		completeConfirmId.value = ""
+	}
+	
+	var doCompleteOrder = (orderId)=> {
+		state.completeOrder(orderId)
+		
+		closeCompleteConfirm()
+	}
+	
+	var maybeCompleteOrder = (orderId)=> {
+		var order = state.getOrderById(orderId)
+		/*if the order is already completed - we do nothing.*/
+		if (order.status) {
+			return
+		}
+		
+		showCompleteConfirm(orderId)
+	}
+	
+	/**********************************************/
 </script>
 
 <template>
@@ -112,8 +152,14 @@
 						/>
 					</div>
 				</Hider>
-				<button @click="showCancelConfirm(order.id)">
+				<button
+					v-if="!order.status"
+					@click="showCancelConfirm(order.id)"
+				>
 					Отменить
+				</button>
+				<button @click="maybeCompleteOrder(order.id)">
+					{{ order.status ? "✔️" : "🚘" }}
 				</button>
 			</div>
 			<Confirm
@@ -121,6 +167,12 @@
 				:prompt="cancelConfirmText"
 				@yes="doCancelOrder(cancelConfirmId)"
 				@no="closeCancelConfirm"
+			/>
+			<Confirm
+				v-if="isCompleteConfirmShown"
+				:prompt="completeConfirmText"
+				@yes="doCompleteOrder(completeConfirmId)"
+				@no="closeCompleteConfirm"
 			/>
 		</div>
 		<div v-else>
