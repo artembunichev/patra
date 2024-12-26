@@ -493,6 +493,11 @@ class State {
 	getItemAmountInTheOrders(id) {
 		return this.orders.reduce(
 			(acc, order)=> {
+				/*filter out completed orders.*/
+				if (order.status) {
+					return acc
+				}
+				
 				Object.keys(order.items).forEach(
 					(itemId)=> {
 						if (id === itemId) {
