@@ -167,10 +167,14 @@
 	
 	/***********************************************/
 	
-	/******************* Amount in orders. ********/
+	/******************* Remains/Amounts. ********/
 	
 	var amountInOrders = computed(
 		()=> state.getItemAmountInTheOrders(props.id)
+	)
+	
+	var amountInTmp = computed(
+		()=> state.getAmountOfItemInTempStore(props.id)
 	)
 	
 	/**********************************************/
@@ -193,7 +197,12 @@
 			<div
 				v-if="amountInOrders > 0"
 			>
-				В пути {{ amountInOrders }}
+				В пути: {{ amountInOrders }}
+			</div>
+			<div
+				v-if="amountInTmp > 0"
+			>
+				Ждут распределения: {{ amountInTmp }}
 			</div>
 			<button @click="activateEditNameMode">РЕД</button>
 			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>

@@ -849,6 +849,15 @@ class State {
 		realItem.remain[store] += tmpAmount
 	}
 	
+	getAmountOfItemInTempStore(itemId) {
+		var amount = this.tempStore[itemId]
+		if (amount === undefined) {
+			return 0
+		}
+		
+		return amount
+	}
+	
 	/******************************************/
 }
 
