@@ -3,10 +3,48 @@ import {inject} from "vue"
 import {mkId} from "./lib/id"
 import {formatDate, formatDateShort} from "./lib/date"
 import {actualKeys} from "./lib/obj"
+import {exstorageLS} from "./lib/exstorage-ls"
 
 class State {
 	constructor(){
+		var dataFromStorage = this.exstorage.get()
+		
+		if (!dataFromStorage) {
+			this.syncWithExstorage()
+		}
+		else {
+			this.applyDataFromExstorage(dataFromStorage)
+		}
+		
 		return makeFullReactive(this)
+	}
+	
+	exstorage = exstorageLS
+	
+	applyDataFromExstorage(data) {
+		this.stores = data.stores
+		this.vendors = data.vendors
+		this.items = data.items
+		this.hist = data.hist
+		this.buyList = data.buyList
+		this.orders = data.orders
+		this.tempStore = data.tempStore
+	}
+	
+	syncWithExstorage() {
+		this.exstorage.save(this.dataForExstorage)
+	}
+	
+	get dataForExstorage() {
+		return {
+			stores: this.stores,
+			vendors: this.vendors,
+			items: this.items,
+			hist: this.hist,
+			buyList: this.buyList,
+			orders: this.orders,
+			tempStore: this.tempStore,
+		}
 	}
 	
 	/*
@@ -66,6 +104,8 @@ class State {
 	addStore(name){
 		this.stores.push(name)
 		this.addRecordAboutStoreInItems(name)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -79,6 +119,8 @@ class State {
 				item.remain[store] = 0
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	deleteStore(name) {
@@ -88,6 +130,8 @@ class State {
 			}
 		)
 		this.removeRecordsAboutDeletedStore(name)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -133,6 +177,8 @@ class State {
 			}
 		)
 		
+		this.syncWithExstorage()
+		
 		return true
 	}
 	
@@ -146,6 +192,8 @@ class State {
 				delete item.remain[store]
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -165,6 +213,8 @@ class State {
 				item.remain[from] = 0;
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*see `validateItemName`.*/
@@ -234,6 +284,8 @@ class State {
 	
 	addVendor(name){
 		this.vendors.push(name)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -318,6 +370,8 @@ class State {
 				id: mkId()
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	validateItemVendor(vendor) {
@@ -429,6 +483,8 @@ class State {
 		
 		this.items[itemIdx].name = newName
 		
+		this.syncWithExstorage()
+		
 		return true
 	}
 	
@@ -436,6 +492,8 @@ class State {
 		var item = this.getItemById(id)
 		
 		item.comment = comment
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -470,6 +528,8 @@ class State {
 			this.addItemToBuyList(itemId, -diff)
 		}
 		
+		this.syncWithExstorage()
+		
 		return true
 	}
 	
@@ -479,6 +539,8 @@ class State {
 				return itemId !== id
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	getItemById(id) {
@@ -565,6 +627,8 @@ class State {
 			store: store,
 			diff: diff
 		})
+		
+		this.syncWithExstorage()
 	}
 	
 	/*********************************************/
@@ -602,10 +666,14 @@ class State {
 		}
 		
 		this.buyList[itemId] = newCount
+		
+		this.syncWithExstorage()
 	}
 	
 	removeItemFromBuyList(itemId) {
 		delete this.buyList[itemId]
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -650,6 +718,9 @@ class State {
 		}
 		
 		this.buyList[itemId] = count
+		
+		this.syncWithExstorage()
+		
 		return true
 	}
 	
@@ -716,6 +787,8 @@ class State {
 				this.removeItemFromBuyList(itemId)
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -744,6 +817,8 @@ class State {
 				this.buyList[itemId] += order.items[itemId]
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -766,6 +841,8 @@ class State {
 				)
 			}
 		)
+		
+		this.syncWithExstorage()
 	}
 	
 	editOrderItemRemain(orderId, itemId, count) {
@@ -780,6 +857,8 @@ class State {
 		const order = this.getOrderById(orderId)
 		
 		order.items[itemId] = count
+		
+		this.syncWithExstorage()
 		
 		return true
 	}
@@ -834,6 +913,8 @@ class State {
 			this.tempStore[itemId] = 0
 		}
 		this.tempStore[itemId] += amount
+		
+		this.syncWithExstorage()
 	}
 	
 	/*
@@ -858,6 +939,8 @@ class State {
 			`realItem` is a struct, so can edit it directly.
 		*/
 		realItem.remain[store] += amount
+		
+		this.syncWithExstorage()
 	}
 	
 	getAmountOfItemInTempStore(itemId) {
