@@ -34,6 +34,60 @@
 			return
 		}
 		
+		var isSomeInBuyList = state.actualBuyListKeys
+			.some(
+				(itemId)=> {
+					return itemId === props.id
+				}
+			)
+		
+		if (isSomeInBuyList) {
+			state.setError(
+				"Нельзя удалить товар - он есть в закупке."
+			)
+			return
+		}
+		
+		var isSomeInOrder = state.orders.some(
+			(order)=> {
+				return Object.keys(order.items).some(
+					(itemId)=> {
+						return (
+							/*
+								search only in
+								uncompleted orders.
+							*/
+							!order.status
+							&&
+							itemId === props.id
+						)
+					}
+				)
+			}
+		)
+		
+		if (isSomeInOrder) {
+			state.setError(
+				"Нельзя удалить товар - он заказан (едет)."
+			)
+			return
+		}
+		
+		var isSomeInTempStore = state.actualTempStoreKeys
+			.some(
+				(itemId)=> {
+					return itemId === props.id
+				}
+			)
+		
+		if (isSomeInTempStore) {
+			state.setError(
+				"Нельзя удалить товар -"
+				+ " он есть на транзитном складе."
+			)
+			return
+		}
+		
 		confirmDeleteItem()
 	}
 	
