@@ -1,5 +1,5 @@
 <script setup>
-	import {ref,watch} from "vue"
+	import {ref,watch,computed} from "vue"
 	
 	var props = defineProps({
 		/*
@@ -26,14 +26,55 @@
 			type: Boolean,
 			default: false
 		},
+		/*
+			Optional.
+		*/
+		"minValue": {
+			type: Number,
+			default: 0,
+		},
+		/*Optional.*/
+		"maxValue": {
+			type: Number,
+			/* no limit by default. */
+			default: Infinity,
+		}
 	})
 	
 	var emit = defineEmits([
 		"activateEditRemainMode",
-		"quitEditMode"
+		"quitEditMode",
+		"plus",
+		"minus",
 	])
 	
 	var editRemainValue = ref(0)
+	
+	var isMinusDisabled = computed(()=> {
+		return (
+			remainMinusValue.value < 0
+			||
+			editRemainValue.value <= props.minValue
+			||
+			(
+				editRemainValue.value - remainMinusValue.value
+				< props.minValue
+			)
+		)
+	})
+	
+	var isPlusDisabled = computed(()=> {
+		return (
+			remainPlusValue.value < 0
+			||
+			editRemainValue.value >= props.maxValue
+			||
+			(
+				editRemainValue.value + remainPlusValue.value
+				> props.maxValue
+			)
+		)
+	})
 	
 	var activateEditRemainMode = ()=> {
 		emit("activateEditRemainMode", props._key)
@@ -44,10 +85,12 @@
 	var remainMinusValue = ref(1)
 	
 	var applyRemainPlus = ()=> {
-		editRemainValue.value += remainPlusValue.value
+		editRemainValue.value += Number(remainPlusValue.value)
+		emit("plus",  Number(remainPlusValue.value))
 	}
 	var applyRemainMinus = ()=> {
 		editRemainValue.value -= remainMinusValue.value
+		emit("minus", remainMinusValue.value)
 	}
 	
 	var quitRemainEditMode = ()=> {
@@ -57,10 +100,12 @@
 		emit("quitEditMode")
 	}
 	
+	
 	var tryToChangeRemain = ()=> {
 		var isChangeSuccess = props.tryToApply(
 			props.id,
-			editRemainValue.value
+			editRemainValue.value,
+			
 		)
 		
 		if (isChangeSuccess) {
@@ -99,6 +144,7 @@
 				<div class="edit-remain-control">
 					<button
 						class="edit-remain-button"
+						:disabled="isMinusDisabled"
 						@click="applyRemainMinus"
 					>
 						-
@@ -118,6 +164,7 @@
 				<div class="edit-remain-control">
 					<button
 						class="edit-remain-button"
+						:disabled="isPlusDisabled"
 						@click="applyRemainPlus"
 					>
 						+
@@ -131,6 +178,9 @@
 				</div>
 				<button @click="tryToChangeRemain">
 					ОК
+				</button>
+				<button @click="quitRemainEditMode">
+					Отменить
 				</button>
 			</div>
 		</div>

@@ -830,23 +830,27 @@ class State {
 	}
 	
 	/*
-		remove item from temp store and put it in a
-		particular real storage.
+		remove item this amount of item from temp
+		store and put it in a particular real storage.
 	*/
-	disposeTempStoreItem(itemId, store) {
+	disposeTempStoreItem(itemId, amount, store) {
 		/*item from the `items`.*/
 		var realItem = this.getItemById(itemId)
 		if (!realItem) {
 			return
 		}
 		
-		var tmpAmount = this.tempStore[itemId]
-		if (tmpAmount === undefined) {
-			return
+		/* remove from temp store. */
+		this.tempStore[itemId] -= amount
+		if (this.tempStore[itemId] === 0) {
+			delete this.tempStore[itemId]
 		}
 		
-		/*`realItem` is a struct, so can edit it directly.*/
-		realItem.remain[store] += tmpAmount
+		/*
+			add to real store.
+			`realItem` is a struct, so can edit it directly.
+		*/
+		realItem.remain[store] += amount
 	}
 	
 	getAmountOfItemInTempStore(itemId) {
