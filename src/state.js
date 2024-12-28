@@ -305,15 +305,16 @@ class State {
 				<storage>: remainNumber,
 				...
 			},
-			id: string
+			id: string,
+			comment: string,
 		}
 	*/
 	items=[];
 	
-	addItem({name,vendor,remain}){
+	addItem({name,vendor,remain, comment}){
 		this.items.push(
 			{
-				name,vendor,remain,
+				name,vendor,remain,comment,
 				id: mkId()
 			}
 		)
@@ -429,6 +430,12 @@ class State {
 		this.items[itemIdx].name = newName
 		
 		return true
+	}
+	
+	editItemComment(id, comment) {
+		var item = this.getItemById(id)
+		
+		item.comment = comment
 	}
 	
 	/*

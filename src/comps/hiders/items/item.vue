@@ -10,7 +10,8 @@
 		"id",
 		"name",
 		"vendor",
-		"remain"
+		"remain",
+		"comment"
 	])
 	var state = useState();
 	
@@ -232,6 +233,44 @@
 	)
 	
 	/**********************************************/
+	
+	/*************** Comment. ********************/
+	
+	var isCommentEditMode = ref(false)
+	var commentEditValue = ref(props.comment)
+	
+	var isCreateNewCommentMode = ref(false)
+	
+	var normalizeCommentEditValue = ()=> {
+		commentEditValue.value = commentEditValue.value.trim()
+	}
+	
+	var activateCommentEditMode = ()=> {
+		isCommentEditMode.value = true
+		commentEditValue.value = props.comment
+	}
+	
+	var activateCreateNewCommentMode = ()=> {
+		isCreateNewCommentMode.value = true
+		activateCommentEditMode()
+	}
+	
+	var quitCommentEditMode = ()=> {
+		isCommentEditMode.value = false
+		isCreateNewCommentMode.value = false
+		commentEditValue.value = props.comment
+	}
+	
+	var changeTheComment = ()=> {
+		normalizeCommentEditValue()
+		
+		state.editItemComment(
+			props.id, commentEditValue.value
+		)
+		quitCommentEditMode()
+	}
+	
+	/**********************************************/
 </script>
 
 <template>
@@ -310,6 +349,36 @@
 					@quitEditMode="quitEditMode"
 				/>
 			</div>
+		</div>
+		<div
+			v-if="props.comment || isCreateNewCommentMode"
+		>
+			<div v-if="isCommentEditMode">
+				<textarea
+					placeholder="Комментарий"
+					v-model="commentEditValue"
+					@blur="normalizeCommentEditValue"
+				/>
+				<button @click="changeTheComment">
+					ОК
+				</button>
+				<button @click="quitCommentEditMode">
+					Отменить
+				</button>
+			</div>
+			<div v-else>
+				<div>
+					{{ props.comment }}
+				</div>
+				<button @click="activateCommentEditMode">
+					Изм. комментарий
+				</button>
+			</div>
+		</div>
+		<div v-else>
+			<button @click="activateCreateNewCommentMode">
+				Добавить комментарий
+			</button>
 		</div>
 	</div>
 </template>

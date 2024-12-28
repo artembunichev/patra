@@ -29,6 +29,7 @@
 					:name="item.name"
 					:vendor="item.vendor"
 					:remain="item.remain"
+					:comment="item.comment"
 				/>
 			</div>
 		</div>

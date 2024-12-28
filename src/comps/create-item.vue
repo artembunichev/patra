@@ -9,6 +9,11 @@
 	var vendor=ref("")
 	var remain = reactive({})
 	
+	var comment = ref("")
+	var normalizeComment = ()=> {
+		comment.value = comment.value.trim()
+	}
+	
 	var doWeHaveStores = state.stores.length > 0
 	var doWeHaveVendors = state.vendors.length > 0
 	
@@ -20,6 +25,7 @@
 	function reset() {
 		name.value=""
 		vendor.value=""
+		comment.value = ""
 		
 		remain = state.stores.reduce(
 			(acc, storeName)=> {
@@ -38,6 +44,7 @@
 	
 	var createItem =()=> {
 		normalizeName()
+		normalizeComment()
 		
 		/* Validate the form. */
 		if (
@@ -45,14 +52,20 @@
 				{
 					name: name.value,
 					vendor: vendor.value,
-					remain: remain
+					remain: remain,
+					comment: comment,
 				}
 			)
 		) {
 			return
 		}
 		
-		state.addItem({name: name.value,vendor:vendor.value,remain})
+		state.addItem({
+			name: name.value,
+			vendor:vendor.value,
+			remain,
+			comment,
+		})
 		reset()
 	}
 	
@@ -106,6 +119,14 @@
 		<button @click="state.page = 'createStore'">
 			Создать склад
 		</button>
+	</div>
+	
+	<div>
+		<textarea
+			placeholder="Комментарий"
+			v-model="comment"
+			@blur="normalizeComment"
+		></textarea>
 	</div>
 	
 	<button
