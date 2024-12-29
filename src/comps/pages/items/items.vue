@@ -9,8 +9,6 @@
 	import Search from "./search.vue"
 	import {useState} from "../../../state"
 	
-	var props=defineProps(["isInitiallyShown", "title"])
-	
 	var state = useState();
 </script>
 
@@ -20,7 +18,10 @@
 	</div>
 	<div v-else>
 		<Search />
-		<div v-for="item in state.filteredItems">
+		<div
+			v-if="state.filteredItems.length > 0"
+			v-for="item in state.filteredItems"
+		>
 			<Item
 				:id="item.id"
 				:name="item.name"
@@ -29,5 +30,16 @@
 				:comment="item.comment"
 			/>
 		</div>
+		<div v-else>
+			По запросу
+			<span class="search-req">{{ state.searchPattern }}</span>
+			ничего не найдено
+		</div>
 	</div>
 </template>
+
+<style scoped>
+	.search-req {
+		font-weight: bold;
+	}
+</style>
