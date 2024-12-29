@@ -1,9 +1,10 @@
-import { BrowserWindow, app, ipcMain } from 'electron'
-import * as path from 'path'
-import * as fs from 'fs'
+var { BrowserWindow, app, ipcMain } = require('electron')
+var path = require('path')
+var fs = require( 'fs')
 
 var mainWindow
-mainWindow = new BrowserWindow( {
+app.on("ready", ()=> {
+	mainWindow = new BrowserWindow( {
 	titleBarStyle: 'hidden',
 	webPreferences: {
 		nodeIntegration: true,
@@ -20,6 +21,7 @@ mainWindow.loadFile( path.join( __dirname, '../index.html' ) )
 mainWindow.on( 'closed', () => {
 	mainWindow = null
 } )
+})
 
 var appDataFilename = 'data.json'
 

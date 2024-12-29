@@ -1,3 +1,3 @@
-import { ipcRenderer } from 'electron'
+var { ipcRenderer } = require('electron')
 
 window.ipcRenderer = ipcRenderer
