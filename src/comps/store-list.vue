@@ -87,7 +87,9 @@
 
 <template>
 	<div class="title">Список складов</div>
-	<button @click="state.page = 'main'">На главную</button>
+	<button @click="state.page = 'createStore'">
+		Новый склад
+	</button>
 	<div v-if="state.stores.length > 0">
 		<ul>
 			<li v-for="(totalItems, store) in state.storeItemStats">

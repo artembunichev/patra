@@ -25,14 +25,17 @@
 <template>
 	<h1>Patra</h1>
 	<div class="nav">
-		<button @click="state.page = 'createItem'">
+		<button
+			v-if="state.page === 'main'"
+			@click="state.page = 'createItem'"
+		>
 			Новый товар
 		</button>
-		<button @click="state.page = 'createStore'">
-			Новый склад
-		</button>
-		<button @click="state.page = 'createVendor'">
-			Новый поставщик
+		<button
+			v-else
+			@click="state.page = 'main'"
+		>
+			На главную
 		</button>
 		<button @click="state.page = 'vendorList'">
 			Список поставщиков

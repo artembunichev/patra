@@ -7,7 +7,9 @@
 
 <template>
 	<div class="title">Список поставщиков</div>
-	<button @click="state.page = 'main'">На главную</button>
+	<button @click="state.page = 'createVendor'">
+		Новый поставщик
+	</button>
 	<ul v-if="state.vendors.length > 0">
 		<li v-for="(itemsNumber, vendor) in state.vendorItemStats">
 			{{ vendor }}: {{ itemsNumber }} {{ plurItem(itemsNumber) }}.
