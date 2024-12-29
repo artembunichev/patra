@@ -53,7 +53,7 @@
 					name: name.value,
 					vendor: vendor.value,
 					remain: remain,
-					comment: comment,
+					comment: comment.value,
 				}
 			)
 		) {
@@ -64,7 +64,7 @@
 			name: name.value,
 			vendor:vendor.value,
 			remain,
-			comment,
+			comment: comment.value,
 		})
 		reset()
 	}

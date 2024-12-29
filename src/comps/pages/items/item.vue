@@ -364,7 +364,7 @@
 			</div>
 		</div>
 		<div
-			v-if="props.comment !== '' || isCreateNewCommentMode"
+			v-if="props.comment || isCreateNewCommentMode"
 		>
 			<div v-if="isCommentEditMode">
 				<textarea
