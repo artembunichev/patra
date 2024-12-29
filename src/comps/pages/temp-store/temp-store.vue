@@ -1,7 +1,7 @@
 <script setup>
-	import Modal from "./modal.vue"
+	import Modal from "../../modal.vue"
 	import TempStoreDispose from "./temp-store-dispose.vue"
-	import {useState} from "../state"
+	import {useState} from "../../../state"
 	import {ref} from "vue"
 	
 	var state=useState()
@@ -57,5 +57,4 @@
 	<div v-else>
 		Транзитный склад пуст...
 	</div>
-	<button @click="state.page = 'main'">На главную</button>
 </template>

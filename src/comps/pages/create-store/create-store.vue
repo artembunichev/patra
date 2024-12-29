@@ -1,6 +1,6 @@
 <script setup>
-	import Create from "./create.vue"
-	import {useState} from "../state"
+	import Create from "../../create.vue"
+	import {useState} from "../../../state"
 	
 	var state=useState()
 </script>

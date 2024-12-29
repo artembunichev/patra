@@ -1,6 +1,6 @@
 <script setup>
-	import {useState} from "../state"
-	import {plurItem} from "../lib/plur"
+	import {useState} from "../../../state"
+	import {plurItem} from "../../../lib/plur"
 	
 	var state=useState()
 </script>
@@ -17,8 +17,5 @@
 	</ul>
 	<div v-else>
 		Поставщиков пока нет...
-		<button @click="state.page = 'createVendor'">
-			Создать поставщика
-		</button>
 	</div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-	import {useState} from "../state"
+	import {useState} from "../../../state"
 	import {ref} from "vue"
 	
 	var state=useState()
@@ -16,7 +16,6 @@
 
 <template>
 	<div class="title">Перемещение по складам</div>
-	<button @click="state.page = 'main'">На главную</button>
 	
 	<div v-if="state.stores.length > 1">
 		<span>Переместить все детали со склада</span>

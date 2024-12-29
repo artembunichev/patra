@@ -63,7 +63,7 @@ class State {
 	}
 	
 	/*
-		main
+		items
 		createVendor
 		createItem
 		createStore
@@ -71,8 +71,11 @@ class State {
 		storeList
 		storeMove
 		tempStore
+		hist
+		buy
+		orders
 	*/
-	page = "main"
+	page = "items"
 	
 	
 	/************** Errors. **************/
@@ -93,22 +96,6 @@ class State {
 	}
 	
 	/************************************/
-	
-	
-	/************* Hiders. ****************/
-	
-	/*
-		whether or not a content of this particular
-		hider is visible.
-	*/
-	hiderStates = {
-		items: false,
-		hist: false,
-		buy: false,
-		orders: false, 
-	}
-	
-	/**************************************/
 	
 	
 	/************** Stores. ****************/

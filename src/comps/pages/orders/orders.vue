@@ -1,5 +1,4 @@
 <script setup>
-	import AppHider from "../../app-hider.vue"
 	import Hider from "../../hider.vue"
 	import Confirm from "../../confirm.vue"
 	import ItemCounter from "../../item-counter.vue"
@@ -135,53 +134,51 @@
 </script>
 
 <template>
-	<AppHider id="orders" title="Заказы">
-		<div v-if="state.orders.length > 0">
-			<div v-for="order in state.ordersReversedAndSorted">
-				<Hider
-					:isShown="orderHidersState[order.id]"
-					:title="getHiderTitle(order)"
-					@toggle="(val)=> onOrderHiderToggle(order,val)"
-				>
-					<div v-for="itemId in Object.keys(order.items)">
-						<ItemCounter
-							:readOnly="order.status"
-							:_key="getItemCounterKey(order,itemId)"
-							:id="itemId"
-							:title="state.getItemById(itemId).name"
-							:count="order.items[itemId]"
-							:tryToApply="tryToTryToChangeRemain"
-							:editRemainFor="editRemainFor"
-							@activateEditRemainMode="activateEditRemainMode"
-							@quitEditMode="quitEditMode"
-						/>
-					</div>
-				</Hider>
-				<button
-					v-if="!order.status"
-					@click="showCancelConfirm(order.id)"
-				>
-					🛇
-				</button>
-				<button @click="maybeCompleteOrder(order.id)">
-					{{ order.status ? "✔️" : "🚘" }}
-				</button>
-			</div>
-			<Confirm
-				v-if="isCancelConfirmShown"
-				:prompt="cancelConfirmText"
-				@yes="doCancelOrder(cancelConfirmId)"
-				@no="closeCancelConfirm"
-			/>
-			<Confirm
-				v-if="isCompleteConfirmShown"
-				:prompt="completeConfirmText"
-				@yes="doCompleteOrder(completeConfirmId)"
-				@no="closeCompleteConfirm"
-			/>
+	<div v-if="state.orders.length > 0">
+		<div v-for="order in state.ordersReversedAndSorted">
+			<Hider
+				:isShown="orderHidersState[order.id]"
+				:title="getHiderTitle(order)"
+				@toggle="(val)=> onOrderHiderToggle(order,val)"
+			>
+				<div v-for="itemId in Object.keys(order.items)">
+					<ItemCounter
+						:readOnly="order.status"
+						:_key="getItemCounterKey(order,itemId)"
+						:id="itemId"
+						:title="state.getItemById(itemId).name"
+						:count="order.items[itemId]"
+						:tryToApply="tryToTryToChangeRemain"
+						:editRemainFor="editRemainFor"
+						@activateEditRemainMode="activateEditRemainMode"
+						@quitEditMode="quitEditMode"
+					/>
+				</div>
+			</Hider>
+			<button
+				v-if="!order.status"
+				@click="showCancelConfirm(order.id)"
+			>
+				🛇
+			</button>
+			<button @click="maybeCompleteOrder(order.id)">
+				{{ order.status ? "✔️" : "🚘" }}
+			</button>
 		</div>
-		<div v-else>
-			Заказов пока не было...
-		</div>
-	</AppHider>
+		<Confirm
+			v-if="isCancelConfirmShown"
+			:prompt="cancelConfirmText"
+			@yes="doCancelOrder(cancelConfirmId)"
+			@no="closeCancelConfirm"
+		/>
+		<Confirm
+			v-if="isCompleteConfirmShown"
+			:prompt="completeConfirmText"
+			@yes="doCompleteOrder(completeConfirmId)"
+			@no="closeCompleteConfirm"
+		/>
+	</div>
+	<div v-else>
+		Заказов пока не было...
+	</div>
 </template>

@@ -44,5 +44,4 @@
 		@keypress="handleKeypress"
 	/>
 	<button @click="doCreate">Создать</button>
-	<button @click="state.page = 'main'">На главную</button>
 </template>

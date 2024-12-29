@@ -1,7 +1,7 @@
 <script setup>
-	import Create from "./create.vue"
+	import Create from "../../create.vue"
 	import {ref, reactive} from "vue"
-	import {useState} from "../state"
+	import {useState} from "../../../state"
 	
 	var state=useState()
 	
@@ -135,6 +135,4 @@
 	>
 		СОЗДАТЬ ТОВАР!
 	</button>
-	
-	<button @click="state.page = 'main'">На главную</button>
 </template>

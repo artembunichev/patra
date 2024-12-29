@@ -1,7 +1,7 @@
 <script setup>
-	import Confirm from "./confirm.vue"
-	import {useState} from "../state"
-	import {plurItem} from "../lib/plur"
+	import Confirm from "../../confirm.vue"
+	import {useState} from "../../../state"
+	import {plurItem} from "../../../lib/plur"
 	import {ref} from "vue"
 	
 	var state=useState()
@@ -127,8 +127,5 @@
 	</div>
 	<div v-else>
 		Складов пока нет...
-		<button @click="state.page = 'createStore'">
-			Создать склад
-		</button>
 	</div>
 </template>

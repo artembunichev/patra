@@ -1,7 +1,7 @@
 <script setup>
-	import Modal from "./modal.vue"
-	import ItemCounter from "./item-counter.vue"
-	import {useState} from "../state"
+	import Modal from "../../modal.vue"
+	import ItemCounter from "../../item-counter.vue"
+	import {useState} from "../../../state"
 	import {ref,computed} from "vue"
 	
 	var props = defineProps([
