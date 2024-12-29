@@ -259,6 +259,13 @@
 		isCommentEditMode.value = false
 		isCreateNewCommentMode.value = false
 		commentEditValue.value = props.comment
+		isCommentConfirmShown.value = false
+	}
+	
+	var isCommentConfirmShown = ref(false)
+	
+	var showCommentConfirm = ()=> {
+		isCommentConfirmShown.value = true
 	}
 	
 	var changeTheComment = ()=> {
@@ -330,6 +337,12 @@
 			</Modal>
 		</div>
 		<div>Поставщик: {{ vendor }}</div>
+		<Confirm
+			v-if="isCommentConfirmShown"
+			:prompt="`Ты реально хочешь изменить комментарий?`"
+			@yes="changeTheComment"
+			@no="quitCommentEditMode"
+		/>
 		<div>
 			<button
 				@click="toggleExplicitStores"
@@ -351,7 +364,7 @@
 			</div>
 		</div>
 		<div
-			v-if="props.comment || isCreateNewCommentMode"
+			v-if="props.comment !== '' || isCreateNewCommentMode"
 		>
 			<div v-if="isCommentEditMode">
 				<textarea
@@ -359,7 +372,7 @@
 					v-model="commentEditValue"
 					@blur="normalizeCommentEditValue"
 				/>
-				<button @click="changeTheComment">
+				<button @click="showCommentConfirm">
 					ОК
 				</button>
 				<button @click="quitCommentEditMode">
