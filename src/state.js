@@ -940,6 +940,13 @@ class State {
 		*/
 		realItem.remain[store] += amount
 		
+		this.histCommit({
+			when: new Date,
+			itemName: realItem.name,
+			store: store,
+			diff: amount,
+		})
+		
 		this.syncWithExstorage()
 	}
 	
