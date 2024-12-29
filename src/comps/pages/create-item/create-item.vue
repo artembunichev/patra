@@ -1,5 +1,7 @@
 <script setup>
 	import Create from "../../create.vue"
+	import Modal from "../../modal.vue"
+	import AddToBuyModal from "../../add-to-buy.vue"
 	import {ref, reactive} from "vue"
 	import {useState} from "../../../state"
 	
@@ -8,6 +10,11 @@
 	var name=ref("")
 	var vendor=ref("")
 	var remain = reactive({})
+	/*
+		it is generated on item create and used
+		for add-to-buy modal.
+	*/
+	var itemId = ref("")
 	
 	var comment = ref("")
 	var normalizeComment = ()=> {
@@ -22,10 +29,11 @@
 	*/
 	var isCreateAllowed = doWeHaveStores && doWeHaveVendors
 	
-	function reset() {
+	var reset = ()=> {
 		name.value=""
 		vendor.value=""
 		comment.value = ""
+		itemId.value = ""
 		
 		remain = state.stores.reduce(
 			(acc, storeName)=> {
@@ -40,6 +48,28 @@
 	
 	var normalizeName = ()=> {
 		name.value = name.value.trim()
+	}
+	
+	var isDoneModalShown = ref(false)
+	
+	var openDoneModal = ()=> {
+		isDoneModalShown.value = true
+	}
+	var closeDoneModal = ()=> {
+		isDoneModalShown.value = false
+		reset()
+	}
+	
+	var isAddToBuyModalShown = ref(false)
+	
+	var openAddToBuyModal = ()=> {
+		isDoneModalShown.value = false
+		isAddToBuyModalShown.value = true
+	}
+	
+	var closeAddToBuyModal = ()=> {
+		isAddToBuyModalShown.value = false
+		reset()
 	}
 	
 	var createItem =()=> {
@@ -60,13 +90,15 @@
 			return
 		}
 		
-		state.addItem({
+		/*save the generated id for item.*/
+		itemId.value = state.addItem({
 			name: name.value,
 			vendor:vendor.value,
 			remain,
 			comment: comment.value,
 		})
-		reset()
+		
+		openDoneModal()
 	}
 	
 	var handleKeypress = (e)=> {
@@ -135,4 +167,23 @@
 	>
 		СОЗДАТЬ ТОВАР!
 	</button>
+	
+	<Modal
+		v-if="isDoneModalShown"
+	>
+		Товар {{ name }} успешно создан.
+		<button
+			@click="openAddToBuyModal"
+		>
+			Добавить в закупку
+		</button>
+		<button @click="closeDoneModal">ОК</button>
+	</Modal>
+	
+	<AddToBuyModal
+		v-if="isAddToBuyModalShown"
+		:id="itemId"
+		@success="closeAddToBuyModal"
+		@cancel="closeAddToBuyModal"
+	/>
 </template>

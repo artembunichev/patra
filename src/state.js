@@ -365,15 +365,22 @@ class State {
 	*/
 	items=[];
 	
+	/*
+		returns id of an newly created item.
+	*/
 	addItem({name,vendor,remain, comment}){
+		var id = mkId()
+		
 		this.items.push(
 			{
 				name,vendor,remain,comment,
-				id: mkId()
+				id: id
 			}
 		)
 		
 		this.syncWithExstorage()
+		
+		return id
 	}
 	
 	validateItemVendor(vendor) {
