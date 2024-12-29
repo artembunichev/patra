@@ -6,7 +6,6 @@
 	*/
 	
 	import Item from "./item.vue"
-	import Search from "./search.vue"
 	import {useState} from "../../../state"
 	
 	var state = useState();
@@ -17,7 +16,6 @@
 		Пока товаров нет...
 	</div>
 	<div v-else>
-		<Search />
 		<div
 			v-if="state.filteredItems.length > 0"
 			v-for="item in state.filteredItems"

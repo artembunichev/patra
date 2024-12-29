@@ -5,10 +5,17 @@
 </script>
 
 <template>
-	<div>
+	<div class="search-container">
 		<input
 			placeholder="Поиск"
 			v-model="state.searchPattern"
 		/>
 	</div>
 </template>
+
+<style scoped>
+	.search-container {
+		width: 100%;
+		background: #fff;
+	}
+</style>

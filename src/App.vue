@@ -7,6 +7,7 @@
 	import StoreMove from "./comps/pages/store-move/store-move.vue"
 	import TempStore from "./comps/pages/temp-store/temp-store.vue"
 	import Items from "./comps/pages/items/items.vue"
+	import ItemsSearch from "./comps/pages/items/search.vue"
 	import Hist from "./comps/pages/hist/hist.vue"
 	import Buy from "./comps/pages/buy/buy.vue"
 	import Orders from "./comps/pages/orders/orders.vue"
@@ -52,6 +53,10 @@
 		<button @click="state.page = 'hist'">История</button>
 		<button @click="state.page = 'buy'">Закупка</button>
 		<button @click="state.page = 'orders'">Заказы</button>
+		
+		<ItemsSearch
+			v-if="state.page === 'items'"
+		/>
 	</div>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />
@@ -75,5 +80,7 @@
 	.nav {
 		position: sticky;
 		top: 0;
+		width: 100%;
+		background: #fff;
 	}
 </style>
