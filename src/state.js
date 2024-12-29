@@ -22,13 +22,27 @@ class State {
 	exstorage = exstorage
 	
 	applyDataFromExstorage(data) {
-		this.stores = data.stores
-		this.vendors = data.vendors
-		this.items = data.items
-		this.hist = data.hist
-		this.buyList = data.buyList
-		this.orders = data.orders
-		this.tempStore = data.tempStore
+		/*
+			version 1:
+				{
+					stores: this.stores,
+					vendors: this.vendors,
+					items: this.items,
+					hist: this.hist,
+					buyList: this.buyList,
+					orders: this.orders,
+					tempStore: this.tempStore
+				}
+		*/
+		if (data.version === 1) {
+			this.stores = data.stores
+			this.vendors = data.vendors
+			this.items = data.items
+			this.hist = data.hist
+			this.buyList = data.buyList
+			this.orders = data.orders
+			this.tempStore = data.tempStore
+		}
 	}
 	
 	syncWithExstorage() {
@@ -44,6 +58,7 @@ class State {
 			buyList: this.buyList,
 			orders: this.orders,
 			tempStore: this.tempStore,
+			version: 1,
 		}
 	}
 	
