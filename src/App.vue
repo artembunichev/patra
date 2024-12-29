@@ -24,27 +24,29 @@
 
 <template>
 	<h1>Patra</h1>
-	<button @click="state.page = 'createItem'">
-		Новый товар
-	</button>
-	<button @click="state.page = 'createStore'">
-		Новый склад
-	</button>
-	<button @click="state.page = 'createVendor'">
-		Новый поставщик
-	</button>
-	<button @click="state.page = 'vendorList'">
-		Список поставщиков
-	</button>
-	<button @click="state.page = 'storeList'">
-		Список складов
-	</button>
-	<button @click="state.page = 'tempStore'">
-		{{ tempStoreLength > 0
-			? `Транизитный склад (${tempStoreLength} ${plurItem(tempStoreLength)})`
-			: "Транзитный склад"
-		}}
-	</button>
+	<div class="nav">
+		<button @click="state.page = 'createItem'">
+			Новый товар
+		</button>
+		<button @click="state.page = 'createStore'">
+			Новый склад
+		</button>
+		<button @click="state.page = 'createVendor'">
+			Новый поставщик
+		</button>
+		<button @click="state.page = 'vendorList'">
+			Список поставщиков
+		</button>
+		<button @click="state.page = 'storeList'">
+			Список складов
+		</button>
+		<button @click="state.page = 'tempStore'">
+			{{ tempStoreLength > 0
+				? `Транизитный склад (${tempStoreLength} ${plurItem(tempStoreLength)})`
+				: "Транзитный склад"
+			}}
+		</button>
+	</div>
 	<CreateStore v-if="state.page === 'createStore'" />
 	<CreateVendor v-if="state.page === 'createVendor'" />
 	<CreateItem v-if="state.page === 'createItem'" />
@@ -64,3 +66,10 @@
 		@close="state.clearError"
 	/>
 </template>
+
+<style scoped>
+	.nav {
+		position: sticky;
+		top: 0;
+	}
+</style>
