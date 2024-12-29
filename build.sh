@@ -6,5 +6,5 @@ npx vite build \
 && echo "main.js -> dist/main/index.js" \
 && cp preload.js dist/main/ \
 && echo "preload.js -> dist/main/preload.js" \
-&& echo '{"type": "module"}' > dist/main/package.json \
+&& echo '{"type": "commonjs"}' > dist/main/package.json \
 && echo "dist/main/package.json."
