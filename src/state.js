@@ -3,7 +3,7 @@ import {inject} from "vue"
 import {mkId} from "./lib/id"
 import {formatDate, formatDateShort} from "./lib/date"
 import {actualKeys} from "./lib/obj"
-import {exstorageLS} from "./lib/exstorage-ls"
+import {exstorage} from "./lib/exstorage"
 
 class State {
 	constructor(){
@@ -19,7 +19,7 @@ class State {
 		return makeFullReactive(this)
 	}
 	
-	exstorage = exstorageLS
+	exstorage = exstorage
 	
 	applyDataFromExstorage(data) {
 		this.stores = data.stores

@@ -8,8 +8,31 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "run-script-os",
+    "build:nix": "./build.sh",
+    "build:win32": "bash.exe ./build.sh",
+    "preview": "vite preview",
+    "package": "npm run build && electron-builder build --win -c.extraMetadata.main=dist/main/index.js"
+  },
+  "build": {
+    "appId": "simple.artembunichev.patra",
+    "productName": "patra",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "artifactName": "patra.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "createDesktopShortcut": "always"
+    },
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/**/*"
+    ]
   },
   "dependencies": {
     "@rollup/wasm-node": "^4.24.0",
@@ -18,6 +41,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
+        "electron-builder": "^25.1.8",
     "vite": "^5.3.1"
   }
 }

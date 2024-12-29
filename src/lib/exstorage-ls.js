@@ -1,6 +1,4 @@
-export class ExstorageLS {
-	key="patra-data"
-	
+export class ExstorageLS {	
 	save(data) {
 		var str = JSON.stringify(data)
 		localStorage.setItem(this.key, str)
