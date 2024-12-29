@@ -593,7 +593,7 @@ class State {
 	get filteredItems() {
 		return this.items.filter(
 			({name})=> {
-				var regex = new RegExp(this.searchPattern)
+				var regex = new RegExp(this.searchPattern, "i")
 				return name.match(regex)
 			}
 		)
