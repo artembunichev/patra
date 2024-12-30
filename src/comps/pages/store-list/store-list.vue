@@ -104,11 +104,14 @@
 								@blur="normalizeEditedStoreValue"
 							/>
 							<button @click="tryToRenameStore">ОК</button>
+							<button @click="quitEditMode">Отменить</button>
 						</span>
 						: {{ totalItems }} {{ plurItem(totalItems) }}.
+						<div v-if="editModeForStore !== store">
+							<button @click="confirmDelete(store)">УДАЛИТЬ</button>
+							<button @click="activateEditMode(store)">ИЗМ</button>
+						</div>
 					</div>
-					<button @click="confirmDelete(store)">УДАЛИТЬ</button>
-					<button @click="activateEditMode(store)">ИЗМ</button>
 				</div>
 			</li>
 		</ul>

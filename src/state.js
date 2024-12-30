@@ -170,12 +170,52 @@ class State {
 			}
 		}
 		
-		/*and also update store name in every item.*/
+		/*and also update store name in every item's `remain`.*/
 		this.items.forEach(
 			(item)=> {
 				var remainInFrom = item.remain[from]
 				delete item.remain[from]
 				item.remain[to] = remainInFrom
+			}
+		)
+		
+		this.syncWithExstorage()
+		
+		return true
+	}
+	
+	renameVendor(from, to) {
+		if (from === to) {
+			return true
+		}
+		
+		var nameWasAlreadyTaken = this.vendors.some(
+			(vendor)=> {
+				return vendor === to
+			}
+		)
+		
+		if (nameWasAlreadyTaken) {
+			this.setError(
+				`Нельзя переименовать поставщика "${from}" в "${to}" - `
+				+ `поставщик "${to}" уже существует.`
+			)
+			return false
+		}
+		
+		for (var i = 0; i<this.vendors.length;++i) {
+			if (this.vendors[i] === from) {
+				this.vendors[i] = to
+				break;
+			}
+		}
+		
+		/*update vendor name in every item used it.*/
+		this.items.forEach(
+			(item)=> {
+				if (item.vendor === from) {
+					item.vendor = to
+				}
 			}
 		)
 		
@@ -329,14 +369,17 @@ class State {
 		}
 	*/
 	get vendorItemStats() {
+		
+		var zeroObj = this.vendors.reduce(
+			(acc, vendor)=> {
+				acc[vendor] = 0;
+				return acc;
+			},
+			{}
+		)
+		
 		if (!this.items.length) {
-			return this.vendors.reduce(
-				(acc, vendor)=> {
-					acc[vendor] = 0;
-					return acc;
-				},
-				{}
-			)
+			return zeroObj
 		}
 		
 		return this.items.reduce(
@@ -347,7 +390,7 @@ class State {
 				acc[vendor]++;
 				return acc;
 			},
-			{}
+			zeroObj
 		)
 	}
 	
