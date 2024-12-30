@@ -9,9 +9,24 @@
 	var to = ref("")
 	
 	var move = ()=> {
-		state.moveAllFromStore(from.value, to.value)
+		var isSuccess = (
+			state.moveAllFromStore(from.value, to.value)
+		)
+		
+		if (isSuccess) {
+			showDoneMsg()
+		}
 	}
 	
+	var isDoneMsgShown = ref(false)
+	var isDoneMsgFrom = ref("")
+	var isDoneMsgTo = ref("")
+	
+	var showDoneMsg = ()=> {
+		isDoneMsgShown.value = true
+		isDoneMsgFrom.value = from.value
+		isDoneMsgTo.value = to.value
+	}
 </script>
 
 <template>
@@ -31,6 +46,13 @@
 			</option>
 		</select>
 		<button @click="move">Переместить</button>
+		<div
+			v-if="isDoneMsgShown"
+			class="done-msg"
+		>
+			Все товары со склада {{isDoneMsgFrom}}
+			успешно перенесены на склад {{isDoneMsgTo}}
+		</div>
 	</div>
 	<div v-else-if="state.stores.length === 1">
 		Создан только один склад - перемещать некуда.

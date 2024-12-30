@@ -200,13 +200,15 @@ class State {
 	
 	/*
 		move all items from store `from` to `to`.
+		
+		returns operation success status.
 	*/
 	moveAllFromStore(from, to) {
 		if (from === to) {
 			this.setError(
 				`Склад отправки и склад назначения одинаковые ("${to}").`
 			)
-			return
+			return false
 		}
 		
 		this.items.forEach(
@@ -217,6 +219,8 @@ class State {
 		)
 		
 		this.syncWithExstorage()
+		
+		return true
 	}
 	
 	/*see `validateItemName`.*/
