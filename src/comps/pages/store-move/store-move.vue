@@ -15,6 +15,8 @@
 		
 		if (isSuccess) {
 			showDoneMsg()
+			from.value = ""
+			to.value = ""
 		}
 	}
 	
