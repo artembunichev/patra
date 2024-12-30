@@ -247,6 +247,28 @@
 	}
 	
 	/**********************************************/
+	
+	/********************* Edit vendor. ************/
+	
+	var isVendorEditMode = ref(false)
+	
+	var vendorEditedValue = ref("")
+	
+	var activateVendorEditMode = ()=> {
+		isVendorEditMode.value = true
+		vendorEditedValue.value = props.vendor
+	}
+	var quitVendorEditMode = ()=> {
+		isVendorEditMode.value = false
+		vendorEditedValue.value = props.vendor
+	}
+	
+	var editVendorName = ()=> {
+		state.editItemVendor(props.id, vendorEditedValue.value)
+		quitVendorEditMode()
+	}
+	
+	/***********************************************/
 </script>
 
 <template>
@@ -289,7 +311,30 @@
 				@cancel="closeAddToBuyListModal"
 			/>
 		</div>
-		<div>Поставщик: {{ vendor }}</div>
+		<div class="item-vendor-prop">
+			<div v-if="isVendorEditMode">
+				<div>Поставщик: </div>
+				<select v-model="vendorEditedValue">
+				<option v-for="vendor in state.vendors" :value="vendor">
+					{{ vendor }}
+				</option>
+				</select>
+				<button @click="editVendorName">
+					ОК
+				</button>
+				<button @click="quitVendorEditMode">
+					Отменить
+				</button>
+			</div>
+			<div v-else>
+				<div>
+					Поставщик: {{ vendor }}
+				</div>
+				<button @click="activateVendorEditMode">
+					Изменить
+				</button>
+			</div>
+		</div>
 		<Confirm
 			v-if="isCommentConfirmShown"
 			:prompt="`Ты реально хочешь изменить комментарий?`"
@@ -356,5 +401,9 @@
 		margin-bottom: 10px;
 		background-color: #b5b5b54f;
 		padding: 5px;
+	}
+	
+	.item-vendor-prop {
+		display: flex;
 	}
 </style>

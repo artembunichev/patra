@@ -501,6 +501,14 @@ class State {
 		return true
 	}
 	
+	editItemVendor(id, vendor) {
+		var item = this.getItemById(id)
+		
+		item.vendor = vendor
+		
+		this.syncWithExstorage()
+	}
+	
 	editItemComment(id, comment) {
 		var item = this.getItemById(id)
 		
