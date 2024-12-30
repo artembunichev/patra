@@ -10,5 +10,6 @@
 		:doValidate="state.validateStoreName"
 		:doCreate="state.addStore"
 		target="cклад"
+		targetDone="склад"
 	/>
 </template>

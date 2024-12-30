@@ -3,7 +3,10 @@
 	import {ref} from "vue"
 	
 	var props=defineProps([
+		/*example: "поставщика".*/
 		"target",
+		/*example: "поставщик".*/
+		"targetDone",
 		"doValidate",
 		"doCreate",
 	])
@@ -23,6 +26,9 @@
 			return
 		}
 		props.doCreate(val.value)
+		
+		showIsDoneMsg()
+		
 		val.value = "";
 		emit("oncreate", val.value)
 	}
@@ -34,6 +40,13 @@
 		}
 	}
 	
+	var isDoneMsgShown = ref(false)
+	var doneMsgTarget = ref("")
+	
+	var showIsDoneMsg = ()=> {
+		isDoneMsgShown.value = true
+		doneMsgTarget.value = val.value
+	}
 </script>
 
 <template>
@@ -44,4 +57,17 @@
 		@keypress="handleKeypress"
 	/>
 	<button @click="doCreate">Создать</button>
+	<div
+		v-if="isDoneMsgShown"
+		class="done-msg"
+	>
+		{{ props.targetDone }} {{ doneMsgTarget }} успешно создан!
+	</div>
 </template>
+
+<style>
+	.done-msg {
+		font-weight: bold;
+		color: #0db308;
+	}
+</style>

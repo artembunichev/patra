@@ -10,5 +10,6 @@
 		:doValidate="state.validateVendorName"
 		:doCreate="state.addVendor"
 		target="поставщика"
+		targetDone="поставщик"
 	/>
 </template>
