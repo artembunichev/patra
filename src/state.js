@@ -224,6 +224,16 @@ class State {
 		return true
 	}
 	
+	deleteVendor(vendor) {
+		this.vendors = this.vendors.filter(
+			(v)=> {
+				return v !== vendor
+			}
+		)
+		
+		this.syncWithExstorage()
+	}
+	
 	/*
 		we want to clean all the traces of deleted
 		store that linger around in the item's `remain` object.
