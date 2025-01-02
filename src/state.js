@@ -654,6 +654,17 @@ class State {
 		)
 	}
 	
+	/* `from` and `to` are stores. */
+	moveItem(id, from, to, amount) {
+		var item = this.getItemById(id)
+		
+		item.remain[from] -= amount
+		
+		item.remain[to] += amount
+		
+		this.syncWithExstorage()
+	}
+	
 	
 	/*helps to compute a `filteredItems`.*/
 	searchPattern = ""

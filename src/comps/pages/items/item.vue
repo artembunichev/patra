@@ -5,6 +5,8 @@
 	import AddToBuyModal from "../../add-to-buy.vue"
 	import Confirm from "../../confirm.vue"
 	import ItemCounter from "../../item-counter.vue"
+	import ItemMove from "./item-move.vue"
+	import Modal from "../../modal.vue"
 	
 	var props = defineProps([
 		"id",
@@ -269,6 +271,23 @@
 	}
 	
 	/***********************************************/
+	
+	/************ Move from store. *****************/
+	
+	var moveFromStore = ref("")
+	
+	var startMoveFromStore = (store)=> {
+		moveFromStore.value = store
+	}
+	var quitMoveFromStore = ()=> {
+		moveFromStore.value = ""
+	}
+	
+	var moveFromTo = (from, to, amount)=> {
+		state.moveItem(props.id, from, to, amount)
+	}
+	
+	/***********************************************/
 </script>
 
 <template>
@@ -359,6 +378,23 @@
 					@activateEditRemainMode="activateEditRemainMode"
 					@quitEditMode="quitEditMode"
 				/>
+				<div
+					v-if="state.stores.length > 1 && remainCount > 0"
+				>
+					<button @click="startMoveFromStore(store)">
+						Переместить
+					</button>
+					<Modal
+						v-if="store == moveFromStore"
+					>
+						<ItemMove
+							:id="id"
+							:sourceStore="moveFromStore"
+							@move="(to,amount)=>moveFromTo(moveFromStore,to,amount)"
+							@quit="quitMoveFromStore"
+						/>
+					</Modal>
+				</div>
 			</div>
 		</div>
 		<div

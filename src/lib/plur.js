@@ -23,3 +23,14 @@ export function plurItem(count) {
 		count
 	)
 }
+
+export function plurRemain(count) {
+	return plur(
+		{
+			one: "остался",
+			two: "осталось",
+			many: "осталось",
+		},
+		count
+	)
+}
