@@ -1,7 +1,7 @@
 <script setup>
 	import {useState} from "../../../state"
 	import {ref,computed} from "vue"
-	import {plurItem, plurRemain} from "../../../lib/plur"
+	import {plurItem, plurRemain,plurRemainPieces} from "../../../lib/plur"
 	
 	var props = defineProps([
 		/*id of an item.*/
@@ -35,13 +35,13 @@
 	
 	var doQuit = ()=> {
 		emit("quit")
-		amount.value = ""
+		amount.value = 0
 		to.value = ""
 	}
 	
 	var doMove = ()=> {
 		emit("move", to.value, amount.value)
-		amount.value = ""
+		amount.value = 0
 		to.value = ""
 	}
 	
@@ -74,7 +74,7 @@
 				min="0"
 				:max="remainInDest"
 			/>
-			<span>штук</span>
+			<span>{{plurRemainPieces(amount)}}</span>
 		</div>
 		<div class="dim">
 			На складе {{props.sourceStore}}

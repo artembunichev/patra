@@ -34,3 +34,14 @@ export function plurRemain(count) {
 		count
 	)
 }
+
+export function plurRemainPieces(count) {
+	return plur(
+		{
+			one: "штуки",
+			two: "штук",
+			many: "штук",
+		},
+		count
+	)
+}
