@@ -136,6 +136,7 @@
 	var tryChangeItemName = ()=> {
 		normalizeEditedName()
 		if (state.editItemName(props.id, editedName.value)) {
+			closeRenameConfirm()
 			deactivateEditNameMode(false)
 		}
 	}
@@ -145,6 +146,27 @@
 		if (e.keyCode == 13) {
 			tryChangeItemName()
 		}
+	}
+	
+	var isRenameConfirmShown = ref(false)
+	var renameConfirmPrompt = ref("")
+	var showRenameConfirm = ()=> {
+		/*if we didn't actually edit the name.*/
+		if (props.name === editedName.value) {
+			tryChangeItemName()
+			return
+		}
+		
+		isRenameConfirmShown.value = true
+		renameConfirmPrompt.value = (
+			`Точно переименовать товар "${props.name}"`
+			+ ` в "${editedName.value}"?`
+		)
+	}
+	var closeRenameConfirm = ()=> {
+		isRenameConfirmShown.value = false
+		renameConfirmPrompt.value = ""
+		deactivateEditNameMode()
 	}
 	/*****************************************/
 	
@@ -325,7 +347,7 @@
 					/>
 					<button
 						class="icon-btn"
-						@click="tryChangeItemName"
+						@click="showRenameConfirm"
 					>
 						<img
 							src="../../../icons/tick.svg"
@@ -561,6 +583,13 @@
 		:prompt="`Ты реально хочешь удалить ${name}?`"
 		@yes="doDeleteItem"
 		@no="doNotDeleteItem"
+	/>
+	
+	<Confirm
+		v-if="isRenameConfirmShown"
+		:prompt="renameConfirmPrompt"
+		@yes="tryChangeItemName"
+		@no="closeRenameConfirm"
 	/>
 </template>
 
