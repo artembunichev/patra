@@ -82,7 +82,6 @@
 </template>
 
 <style>
-	
 	* {
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		box-sizing: border-box;
@@ -91,6 +90,7 @@
 	hmtl, body {
 		padding: 0;
 		margin: 0;
+		background: #ededed;
 	}
 	
 	.app {
@@ -101,7 +101,6 @@
 		position: sticky;
 		top: 0;
 		width: 100%;
-		background: #fff;
 	}
 	
 	.nav-btns {
@@ -117,12 +116,12 @@
 		border: none;
 		border-radius: 5px;
 		cursor: pointer;
-	}
-	
-	.nav-btn {
 		padding: 5px;
 		border: 1px solid #ffb446;
 		background: #fffebc;
+	}
+	
+	.nav-btn {
 		margin-right: 8px;
 	}
 	

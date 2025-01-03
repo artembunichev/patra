@@ -219,7 +219,7 @@
 	
 	.edit-remain-container {
 		display: flex;
-		padding: 25px 0 0 0;
+		padding: 28px 0 0 0;
 	}
 	
 	.item-counter-store {
@@ -235,8 +235,8 @@
 	}
 	
 	.edit-remain-button {
-		width: 24px;
-		height: 24x;
+		width: 25px;
+		height: 25px;
 		font-size: 12px;
 		display: flex;
 		justify-content: center;
@@ -244,12 +244,12 @@
 	}
 	
 	.diff-input {
-		width: 18px;
-		height: 18px;
+		width: 25px;
+		height: 25px;
 		font-size: 10px;
 		border: 1px dotted black;
 		position: absolute;
-		top: -24px;
+		top: -28px;
 		left: 0;
 		-webkit-appearance: none;
 		margin: 0;
