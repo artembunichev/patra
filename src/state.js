@@ -175,7 +175,7 @@ class State {
 			(item)=> {
 				var remainInFrom = item.remain[from]
 				delete item.remain[from]
-				item.remain[to] = remainInFrom
+				item.remain[to] = Number(remainInFrom)
 			}
 		)
 		
@@ -263,7 +263,7 @@ class State {
 		
 		this.items.forEach(
 			(item)=> {
-				item.remain[to] += item.remain[from];
+				item.remain[to] += Number(item.remain[from]);
 				item.remain[from] = 0;
 			}
 		)
@@ -321,7 +321,7 @@ class State {
 						if (acc[store] === undefined) {
 							acc[store] = 0
 						}
-						acc[store] += remain[store]
+						acc[store] += Number(remain[store])
 					}
 				)
 				return acc
@@ -587,7 +587,7 @@ class State {
 		var oldRemain = item.remain[store]
 		
 		/*since `item` is object, then it points to actual record.*/
-		item.remain[store] = newRemain
+		item.remain[store] = Number(newRemain)
 		
 		var diff = newRemain - oldRemain
 		
@@ -659,9 +659,9 @@ class State {
 	moveItem(id, from, to, amount) {
 		var item = this.getItemById(id)
 		
-		item.remain[from] -= amount
+		item.remain[from] -= Number(amount)
 		
-		item.remain[to] += amount
+		item.remain[to] += Number(amount)
 		
 		this.syncWithExstorage()
 	}
@@ -1024,7 +1024,7 @@ class State {
 			add to real store.
 			`realItem` is a struct, so can edit it directly.
 		*/
-		realItem.remain[store] += amount
+		realItem.remain[store] += Number(amount)
 		
 		this.histCommit({
 			when: new Date,
