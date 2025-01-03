@@ -294,17 +294,6 @@
 	/***********************************************/
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	
-	
-	
 	var isVerboseMode = ref(false)
 	
 	var activateVerboseMode = ()=> {
@@ -340,26 +329,36 @@
 				
 				<template v-else>
 					<span>{{ props.name }}</span>
-					<span v-if="isVerboseMode">
+					<div>
+						<span v-if="isVerboseMode">
+							<button
+								class="item-head-btn"
+								@click="activateEditNameMode">Ред</button>
+							<button
+								class="item-head-btn"
+								@click="checkForAbilityToDelte">Удал</button>
+							<button
+								class="item-head-btn"
+								@click="openAddToBuyListModal">Z</button>
+							<button
+								class="item-head-btn"
+								@click="toggleExplicitStores"
+							>
+								{{ isExplicitStores ? "🟢" : "👁️" }}
+							</button>
+							<button
+								v-if="!props.comment"
+								@click="activateCreateNewCommentMode"
+							>
+								+ коммент
+							</button>
+						</span>
 						<button
-							class="item-head-btn"
-							@click="activateEditNameMode">Ред</button>
-						<button
-							class="item-head-btn"
-							@click="checkForAbilityToDelte">Удал</button>
-						<button
-							class="item-head-btn"
-							@click="openAddToBuyListModal">Z</button>
-						<button
-							class="item-head-btn"
-							@click="toggleExplicitStores"
-						>
-							{{ isExplicitStores ? "🟢" : "👁️" }}
+							class="item-toggle-verbose-btn"
+							@click="toggleVerboseMode">
+							{{ isVerboseMode ? "^" : "V" }}
 						</button>
-					</span>
-					<button @click="toggleVerboseMode">
-						{{ isVerboseMode ? "^" : "V" }}
-					</button>
+					</div>
 				</template>
 			</div>
 		</td>
@@ -444,6 +443,44 @@
 		</tr>
 	</template>
 	
+	<tr
+		v-if="isVerboseMode && (props.comment || isCreateNewCommentMode)"
+		class="tr-comment"
+	>
+		<td></td>
+		<td
+			class="td-comment"
+			colspan="5"
+		>
+			<div v-if="isCommentEditMode">
+				<textarea
+					placeholder="Комментарий"
+					v-model="commentEditValue"
+					@blur="normalizeCommentEditValue"
+				/>
+				<button @click="showCommentConfirm">
+					ОК
+				</button>
+				<button @click="quitCommentEditMode">
+					Отменить
+				</button>
+			</div>
+			<template v-else>
+				<span>{{ props.comment }}</span>
+				<button @click="activateCommentEditMode">
+					Изм. комментарий
+				</button>
+			</template>
+			
+			<Confirm
+				v-if="isCommentConfirmShown"
+				:prompt="`Ты реально хочешь изменить комментарий?`"
+				@yes="changeTheComment"
+				@no="quitCommentEditMode"
+			/>
+		</td>
+	</tr>
+	
 	<AddToBuyModal
 		v-if="isAddToBuyListModalShown"
 		:id="props.id"
@@ -460,7 +497,7 @@
 </template>
 
 
-<style scoped>	
+<style>
 	.item-name-cell {
 		display: flex;
 		justify-content: space-between;
@@ -468,6 +505,10 @@
 	
 	.item-vendor-prop {
 		display: flex;
+	}
+	
+	.item-toggle-verbose-btn {
+		margin-left: 15px;
 	}
 	
 	.item-move-btn {

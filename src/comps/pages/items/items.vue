@@ -90,4 +90,12 @@
 	tr:nth-child(even) {
 		background-color: #c7c7c75d;
 	}
+	
+	.tr-comment {
+		background: #fffc5b66!important;
+	}
+	
+	.td-comment {
+		text-align: left;
+	}
 </style>
