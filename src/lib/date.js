@@ -6,7 +6,7 @@ import {zerofy} from "./num"
 */
 export function formatDate(date) {
 	var day = zerofy(date.getDate())
-	var month = zerofy(date.getMonth())
+	var month = zerofy(date.getMonth() + 1)
 	var year = date.getFullYear()
 	var hour = zerofy(date.getHours())
 	var min = zerofy(date.getMinutes())
@@ -19,7 +19,7 @@ export function formatDate(date) {
 */
 export function formatDateShort(date) {
 	var day = zerofy(date.getDate())
-	var month = zerofy(date.getMonth())
+	var month = zerofy(date.getMonth() + 1)
 	var year = date.getFullYear()
 	
 	return `${day}.${month}.${year}`
