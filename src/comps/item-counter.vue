@@ -145,9 +145,12 @@
 			</span>
 			<button
 				v-if="!props.readOnly"
+				class="icon-btn"
 				@click="activateEditRemainMode"
 			>
-				ИЗМ
+				<img
+					src="../icons/pencil.svg"
+				/>
 			</button>
 		</div>
 		<div v-else>
@@ -187,11 +190,21 @@
 						v-model="remainPlusValue"
 					/>
 				</div>
-				<button @click="tryToChangeRemain">
-					ОК
+				<button
+					class="icon-btn"
+					@click="tryToChangeRemain"
+				>
+					<img
+						src="../icons/tick.svg"
+					/>
 				</button>
-				<button @click="quitRemainEditMode">
-					Отменить
+				<button
+					class="icon-btn"
+					@click="quitRemainEditMode"
+				>
+					<img
+						src="../icons/cancel.svg"
+					/>
 				</button>
 			</div>
 		</div>

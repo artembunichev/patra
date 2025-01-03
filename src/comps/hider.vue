@@ -14,7 +14,15 @@
 <template>
 	<div>
 		{{ props.title }}
-		<button @click="onToggle">Hide</button>
+		<button
+			class="icon-btn"
+			@click="onToggle"
+		>
+			<img
+				:class="props.isShown ? 'uncollapse' : 'collapse'"
+				src="../icons/arrow-down.svg"
+			/>
+		</button>
 		<div v-if="props.isShown">
 			<slot />
 		</div>

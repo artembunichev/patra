@@ -323,40 +323,80 @@
 						@blur="normalizeEditedName"
 						@keypress="handleEditedNameKeypress"
 					/>
-					<button @click="tryChangeItemName">ОК</button>
-					<button @click="deactivateEditNameMode">ОТМ</button>
+					<button
+						class="icon-btn"
+						@click="tryChangeItemName"
+					>
+						<img
+							src="../../../icons/pencil.svg"
+						/>
+					</button>
+					<button
+						class="icon-btn"
+						@click="deactivateEditNameMode"
+					>
+						<img
+							src="../../../icons/cancel.svg"
+						/>
+					</button>
 				</template>
 				
 				<template v-else>
 					<span>{{ props.name }}</span>
-					<div>
-						<span v-if="isVerboseMode">
+					<div class="extra-btns-container">
+						<template v-if="isVerboseMode">
 							<button
-								class="item-head-btn"
-								@click="activateEditNameMode">Ред</button>
+								class="icon-btn item-head-btn"
+								@click="activateEditNameMode">
+									<img
+										src="../../../icons/pencil.svg"
+									/>
+								</button>
 							<button
-								class="item-head-btn"
-								@click="checkForAbilityToDelte">Удал</button>
+								class="icon-btn item-head-btn"
+								@click="checkForAbilityToDelte">
+									<img
+										src="../../../icons/trash.svg"
+									/>
+								</button>
 							<button
-								class="item-head-btn"
-								@click="openAddToBuyListModal">Z</button>
+								class="icon-btn item-head-btn"
+								@click="openAddToBuyListModal">
+									<img
+										src="../../../icons/cart.svg"
+									/>
+								</button>
 							<button
-								class="item-head-btn"
+								class="icon-btn item-head-btn"
 								@click="toggleExplicitStores"
 							>
-								{{ isExplicitStores ? "🟢" : "👁️" }}
+								<img
+									v-if="isExplicitStores"
+									src="../../../icons/eye-close.svg"
+								/>
+								<img
+									v-else
+									src="../../../icons/eye-open.svg"
+								/>
 							</button>
 							<button
 								v-if="!props.comment"
+								class="icon-btn item-head-btn"
 								@click="activateCreateNewCommentMode"
 							>
-								+ коммент
+								<img
+									src="../../../icons/comment.svg"
+								/>
 							</button>
-						</span>
+						</template>
 						<button
-							class="item-toggle-verbose-btn"
-							@click="toggleVerboseMode">
-							{{ isVerboseMode ? "^" : "V" }}
+							class="icon-btn item-toggle-verbose-btn"
+							@click="toggleVerboseMode"
+						>
+							<img
+								src="../../../icons/arrow-down.svg"
+								:class="isVerboseMode ? 'uncollapse' : 'collapse'"
+							/>
 						</button>
 					</div>
 				</template>
@@ -370,11 +410,21 @@
 						{{ vendor }}
 					</option>
 					</select>
-					<button @click="editVendorName">
-						ОК
+					<button
+						class="icon-btn"
+						@click="editVendorName"
+					>
+						<img
+							src="../../../icons/tick.svg"
+						/>
 					</button>
-					<button @click="quitVendorEditMode">
-						Отменить
+					<button
+						class="icon-btn"
+						@click="quitVendorEditMode"
+					>
+						<img
+							src="../../../icons/cancel.svg"
+						/>
 					</button>
 				</div>
 			</template>
@@ -382,9 +432,12 @@
 				<span>{{ vendor }}</span>
 				<button
 					v-if="isVerboseMode"
+					class="icon-btn"
 					@click="activateVendorEditMode"
 				>
-					Изм
+					<img
+						src="../../../icons/pencil.svg"
+					/>
 				</button>
 			</template>
 		</td>
@@ -405,6 +458,7 @@
 				<div>
 					<span>{{ store }}</span>
 					<button
+						v-if="remainCount > 0"
 						@click="startMoveFromStore(store)"
 						class="item-move-btn"
 					>
@@ -458,17 +512,31 @@
 					v-model="commentEditValue"
 					@blur="normalizeCommentEditValue"
 				/>
-				<button @click="showCommentConfirm">
-					ОК
+				<button
+					class="icon-btn"
+					@click="showCommentConfirm"
+				>
+					<img
+						src="../../../icons/tick.svg"
+					/>
 				</button>
-				<button @click="quitCommentEditMode">
-					Отменить
+				<button
+					class="icon-btn"
+					@click="quitCommentEditMode">
+					<img
+						src="../../../icons/cancel.svg"
+					/>
 				</button>
 			</div>
 			<template v-else>
 				<span>{{ props.comment }}</span>
-				<button @click="activateCommentEditMode">
-					Изм. комментарий
+				<button
+					class="icon-btn"
+					@click="activateCommentEditMode"
+				>
+					<img
+						src="../../../icons/pencil.svg"
+					/>
 				</button>
 			</template>
 			
@@ -501,6 +569,13 @@
 	.item-name-cell {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.extra-btns-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	
 	.item-vendor-prop {
@@ -508,10 +583,28 @@
 	}
 	
 	.item-toggle-verbose-btn {
+		width: 22px;
+		height: 22px;
 		margin-left: 15px;
 	}
 	
 	.item-move-btn {
 		margin-left: 10px;
 	}
+	
+	.collapse{
+		position: relative;
+		top: 2.5px;
+	}
+	
+	.item-head-btn {
+		margin-left: 5px;
+	}
+	
+	.uncollapse {
+		transform: rotate(180deg);
+		position: relative;
+		top: -2.5px;
+	}
+	
 </style>

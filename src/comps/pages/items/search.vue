@@ -7,6 +7,7 @@
 <template>
 	<div class="search-container">
 		<input
+			class="search-input"
 			placeholder="Поиск"
 			v-model="state.searchPattern"
 		/>
@@ -17,5 +18,8 @@
 	.search-container {
 		width: 100%;
 		background: #fff;
+	}
+	.search-input {
+		width: 100%;
 	}
 </style>

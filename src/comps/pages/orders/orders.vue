@@ -157,12 +157,25 @@
 			</Hider>
 			<button
 				v-if="!order.status"
+				class="icon-btn"
 				@click="showCancelConfirm(order.id)"
 			>
-				🛇
+				<img
+					src="../../../icons/cancel.svg"
+				/>
 			</button>
-			<button @click="maybeCompleteOrder(order.id)">
-				{{ order.status ? "✔️" : "🚘" }}
+			<button
+				class="icon-btn"
+				@click="maybeCompleteOrder(order.id)"
+			>
+				<img
+					v-if="order.status"
+					src="../../../icons/tick.svg"
+				/>
+				<img
+					v-else
+					src="../../../icons/car.svg"
+				/>
 			</button>
 		</div>
 		<Confirm

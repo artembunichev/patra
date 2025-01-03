@@ -103,27 +103,45 @@
 					@blur="normalizeEditedVendorValue"
 				/>
 				: {{ itemsNumber }} {{ plurItem(itemsNumber) }}
-				<button @click="tryToRenameVendor">
-					ОК
+				<button class="icon-btn" @click="tryToRenameVendor">
+					<img
+						src="../../../icons/tick.svg"
+					/>
 				</button>
-				<button @click="quitEditMode">
-					Отменить
+				<button class="icon-btn" @click="quitEditMode">
+					<img
+						src="../../../icons/cancel.svg"
+					/>
 				</button>
 			</span>
 			<span v-else>
 				{{ vendor }}: {{ itemsNumber }} {{ plurItem(itemsNumber) }}.
-				<button @click="activateEditMode(vendor)">ИЗМ</button>
-				<button @click="confirmDelete(vendor)">Удалить</button>
+				<button
+					class="icon-btn"
+					@click="activateEditMode(vendor)"
+				>
+					<img
+						src="../../../icons/pencil.svg"
+					/>
+				</button>
+				<button
+					class="icon-btn"
+					@click="confirmDelete(vendor)"
+				>
+					<img
+						src="../../../icons/trash.svg"
+					/>
+				</button>
 			</span>
 		</li>
 	</ul>
+	<div v-else>
+		Поставщиков пока нет...
+	</div>
 	<Confirm
 		v-if="isDeleteConfirmShown"
 		:prompt="`Точно хотим удалить поставщика ${vendorToDelete}?`"
 		@yes="doDelete"
 		@no="closeDeleteConfirm"
 	/>
-	<div v-else>
-		Поставщиков пока нет...
-	</div>
 </template>

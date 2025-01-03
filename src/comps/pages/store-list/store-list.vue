@@ -103,13 +103,41 @@
 								v-model="editedStoreValue"
 								@blur="normalizeEditedStoreValue"
 							/>
-							<button @click="tryToRenameStore">ОК</button>
-							<button @click="quitEditMode">Отменить</button>
+							<button
+								class="icon-btn"
+								@click="tryToRenameStore"
+							>
+								<img
+									src="../../../icons/tick.svg"
+								/>
+							</button>
+							<button
+								class="icon-btn"
+								@click="quitEditMode"
+							>
+								<img
+									src="../../../icons/cancel.svg"
+								/>
+							</button>
 						</span>
 						: {{ totalItems }} {{ plurItem(totalItems) }}.
 						<div v-if="editModeForStore !== store">
-							<button @click="confirmDelete(store)">УДАЛИТЬ</button>
-							<button @click="activateEditMode(store)">ИЗМ</button>
+							<button
+								class="icon-btn"
+								@click="confirmDelete(store)"
+							>
+								<img
+									src="../../../icons/trash.svg"
+								/>
+							</button>
+							<button
+								class="icon-btn"
+								@click="activateEditMode(store)"
+							>
+								<img
+									src="../../../icons/pencil.svg"
+								/>
+							</button>
 						</div>
 					</div>
 				</div>
