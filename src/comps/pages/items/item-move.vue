@@ -1,4 +1,5 @@
 <script setup>
+	import Confirm from "../../confirm.vue"
 	import {useState} from "../../../state"
 	import {ref,computed} from "vue"
 	import {plurItem, plurRemain,plurRemainPieces} from "../../../lib/plur"
@@ -43,11 +44,34 @@
 		emit("move", to.value, amount.value)
 		amount.value = 0
 		to.value = ""
+		closeMoveConfirm()
 	}
 	
 	var amount = ref(0)
 	
 	var to = ref("")
+	
+	var isMoveConfirmShown = ref(false)
+	var moveConfirmPrompt = ref("")
+	
+	var showMoveConfirm = ()=> {
+		/*if no actual move.*/
+		if (props.sourceStore === to.value) {
+			return
+		}
+		
+		isMoveConfirmShown.value = true
+		moveConfirmPrompt.value = (
+			`Точно перенести товар "${item.value.name}"`
+			+ ` (${amount.value}) со склада "${props.sourceStore}"`
+			+ ` на склад "${to.value}"?`
+		)
+	}
+	var closeMoveConfirm = ()=> {
+		isMoveConfirmShown.value = false
+		moveConfirmPrompt.value = ""
+		doQuit()
+	}
 </script>
 
 <template>
@@ -57,8 +81,8 @@
 		</div>
 		<div>
 			<span>
-				Переместить товар {{item.name}} со склада
-				{{sourceStore}} на склад
+				Переместить товар "{{item.name}}" со склада
+				"{{sourceStore}}" на склад
 			</span>
 			<select v-model="to">
 				<option v-for="destStore in destStores" :value="destStore">
@@ -77,18 +101,24 @@
 			<span>{{plurRemainPieces(amount)}}</span>
 		</div>
 		<div class="dim">
-			На складе {{props.sourceStore}}
+			На складе "{{props.sourceStore}}"
 			{{plurRemain(remainInDest)}} {{remainInDest}}
 			{{plurItem(remainInDest)}}
 		</div>
 		<button
-			:disabled="amount > remainInDest || amount < 0 || !to"
-			@click="doMove"
+			:disabled="amount > remainInDest || amount <= 0 || !to"
+			@click="showMoveConfirm"
 		>
 			Переместить
 		</button>
 		<button @click="doQuit">Назад</button>
 	</div>
+	<Confirm
+		v-if="isMoveConfirmShown"
+		:prompt="moveConfirmPrompt"
+		@yes="doMove"
+		@no="closeMoveConfirm"
+	/>
 </template>
 
 <style>
