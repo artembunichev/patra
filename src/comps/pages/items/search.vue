@@ -13,7 +13,7 @@
 	</div>
 </template>
 
-<style scoped>
+<style>
 	.search-container {
 		width: 100%;
 		background: #fff;

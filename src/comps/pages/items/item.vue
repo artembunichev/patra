@@ -10,6 +10,7 @@
 	
 	var props = defineProps([
 		"id",
+		"idx",
 		"name",
 		"vendor",
 		"remain",
@@ -119,9 +120,12 @@
 	var activateEditNameMode = ()=> {
 		isEditNameMode.value = true
 	}
-	var deactivateEditNameMode = ()=> {
+	var deactivateEditNameMode = (reset)=> {
 		isEditNameMode.value = false
-		editedName.value = props.name;
+		
+		if (reset !== false) {
+			editedName.value = props.name;
+		}
 	}
 	var editedName = ref(props.name);
 	
@@ -132,7 +136,7 @@
 	var tryChangeItemName = ()=> {
 		normalizeEditedName()
 		if (state.editItemName(props.id, editedName.value)) {
-			deactivateEditNameMode()
+			deactivateEditNameMode(false)
 		}
 	}
 	
@@ -288,87 +292,132 @@
 	}
 	
 	/***********************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	
+	
+	
+	var isVerboseMode = ref(false)
+	
+	var activateVerboseMode = ()=> {
+		isVerboseMode.value = true
+	}
+	var quitVerboseMode = ()=> {
+		isVerboseMode.value = false
+	}
+	var toggleVerboseMode = ()=> {
+		if (isVerboseMode.value) {
+			quitVerboseMode()
+		}
+		else {
+			activateVerboseMode()
+		}
+	}
 </script>
 
 <template>
-	<div class="block">
-		<div v-if="isEditNameMode">
-			<input
-				v-model="editedName"
-				@blur="normalizeEditedName"
-				@keypress="handleEditedNameKeypress"
-			/>
-			<button @click="tryChangeItemName">ОК</button>
-			<button @click="deactivateEditNameMode">ОТМ</button>
-		</div>
-		<div v-else>
-			<span>{{ props.name }}</span>
-			<div>{{ state.getItemTotalRemain(props.id) }}</div>
-			<div
-				v-if="amountInOrders > 0"
-			>
-				В пути: {{ amountInOrders }}
+	<tr>
+		<td>{{ props.idx }}</td>
+		<td>
+			<div class="item-name-cell">
+				<template v-if="isEditNameMode">
+					<input
+						v-model="editedName"
+						@blur="normalizeEditedName"
+						@keypress="handleEditedNameKeypress"
+					/>
+					<button @click="tryChangeItemName">ОК</button>
+					<button @click="deactivateEditNameMode">ОТМ</button>
+				</template>
+				
+				<template v-else>
+					<span>{{ props.name }}</span>
+					<span v-if="isVerboseMode">
+						<button
+							class="item-head-btn"
+							@click="activateEditNameMode">Ред</button>
+						<button
+							class="item-head-btn"
+							@click="checkForAbilityToDelte">Удал</button>
+						<button
+							class="item-head-btn"
+							@click="openAddToBuyListModal">Z</button>
+						<button
+							class="item-head-btn"
+							@click="toggleExplicitStores"
+						>
+							{{ isExplicitStores ? "🟢" : "👁️" }}
+						</button>
+					</span>
+					<button @click="toggleVerboseMode">
+						{{ isVerboseMode ? "^" : "V" }}
+					</button>
+				</template>
 			</div>
-			<div
-				v-if="amountInTmp > 0"
-			>
-				Ждут распределения: {{ amountInTmp }}
-			</div>
-			<button @click="activateEditNameMode">РЕД</button>
-			<button @click="checkForAbilityToDelte">УДАЛИТЬ</button>
-			<button @click="openAddToBuyListModal">Z</button>
-			<Confirm
-				v-if="isConfirmDeleteModalShown"
-				:prompt="`Ты реально хочешь удалить ${name}?`"
-				@yes="doDeleteItem"
-				@no="doNotDeleteItem"
-			/>
-			<AddToBuyModal
-				v-if="isAddToBuyListModalShown"
-				:id="props.id"
-				@success="closeAddToBuyListModal"
-				@cancel="closeAddToBuyListModal"
-			/>
-		</div>
-		<div class="item-vendor-prop">
-			<div v-if="isVendorEditMode">
-				<div>Поставщик: </div>
-				<select v-model="vendorEditedValue">
-				<option v-for="vendor in state.vendors" :value="vendor">
-					{{ vendor }}
-				</option>
-				</select>
-				<button @click="editVendorName">
-					ОК
-				</button>
-				<button @click="quitVendorEditMode">
-					Отменить
-				</button>
-			</div>
-			<div v-else>
+		</td>
+		<td>
+			<template v-if="isVendorEditMode">
 				<div>
-					Поставщик: {{ vendor }}
+					<select v-model="vendorEditedValue">
+					<option v-for="vendor in state.vendors" :value="vendor">
+						{{ vendor }}
+					</option>
+					</select>
+					<button @click="editVendorName">
+						ОК
+					</button>
+					<button @click="quitVendorEditMode">
+						Отменить
+					</button>
 				</div>
-				<button @click="activateVendorEditMode">
-					Изменить
+			</template>
+			<template v-else>
+				<span>{{ vendor }}</span>
+				<button
+					v-if="isVerboseMode"
+					@click="activateVendorEditMode"
+				>
+					Изм
 				</button>
-			</div>
-		</div>
-		<Confirm
-			v-if="isCommentConfirmShown"
-			:prompt="`Ты реально хочешь изменить комментарий?`"
-			@yes="changeTheComment"
-			@no="quitCommentEditMode"
-		/>
-		<div>
-			<button
-				@click="toggleExplicitStores"
-			>
-				{{ isExplicitStores ? "🟢" : "👁️" }}
-			</button>
-			<div v-for="(remainCount,store) in remain">
+			</template>
+		</td>
+		<td>{{ state.getItemTotalRemain(props.id) }}</td>
+		<td>{{ amountInOrders }}</td>
+		<td class="td-tmp">{{ amountInTmp }}</td>
+	</tr>
+	<template
+		v-for="(remainCount,store) in remain"
+		v-if="isVerboseMode"
+	>
+		<tr
+			v-if="remainCount > 0 || isExplicitStores"
+			class="tr-verbose"
+		>
+			<td></td>
+			<td>
+				<div>
+					<span>{{ store }}</span>
+					<button
+						@click="startMoveFromStore(store)"
+						class="item-move-btn"
+					>
+						Переместить
+					</button>
+				</div>
+			</td>
+			<td></td>
+			<td>
 				<ItemCounter
 					v-if="isExplicitStores ? true : remainCount > 0"
+					:needTitle="false"
 					:_key="store"
 					:id="store"
 					:title="store"
@@ -378,68 +427,50 @@
 					@activateEditRemainMode="activateEditRemainMode"
 					@quitEditMode="quitEditMode"
 				/>
-				<div
-					v-if="state.stores.length > 1 && remainCount > 0"
-				>
-					<button @click="startMoveFromStore(store)">
-						Переместить
-					</button>
-					<Modal
-						v-if="store == moveFromStore"
-					>
-						<ItemMove
-							:id="id"
-							:sourceStore="moveFromStore"
-							@move="(to,amount)=>moveFromTo(moveFromStore,to,amount)"
-							@quit="quitMoveFromStore"
-						/>
-					</Modal>
-				</div>
-			</div>
-		</div>
-		<div
-			v-if="props.comment || isCreateNewCommentMode"
-		>
-			<div v-if="isCommentEditMode">
-				<textarea
-					placeholder="Комментарий"
-					v-model="commentEditValue"
-					@blur="normalizeCommentEditValue"
+			</td>
+			<td></td>
+			<td class="td-tmp"></td>
+			
+			<Modal
+				v-if="store == moveFromStore"
+			>
+				<ItemMove
+					:id="id"
+					:sourceStore="moveFromStore"
+					@move="(to,amount)=>moveFromTo(moveFromStore,to,amount)"
+					@quit="quitMoveFromStore"
 				/>
-				<button @click="showCommentConfirm">
-					ОК
-				</button>
-				<button @click="quitCommentEditMode">
-					Отменить
-				</button>
-			</div>
-			<div v-else>
-				<div>
-					{{ props.comment }}
-				</div>
-				<button @click="activateCommentEditMode">
-					Изм. комментарий
-				</button>
-			</div>
-		</div>
-		<div v-else>
-			<button @click="activateCreateNewCommentMode">
-				Добавить комментарий
-			</button>
-		</div>
-	</div>
+			</Modal>
+		</tr>
+	</template>
+	
+	<AddToBuyModal
+		v-if="isAddToBuyListModalShown"
+		:id="props.id"
+		@success="closeAddToBuyListModal"
+		@cancel="closeAddToBuyListModal"
+	/>
+	
+	<Confirm
+		v-if="isConfirmDeleteModalShown"
+		:prompt="`Ты реально хочешь удалить ${name}?`"
+		@yes="doDeleteItem"
+		@no="doNotDeleteItem"
+	/>
 </template>
 
 
-<style scoped>
-	.block {
-		border: 1px solid #000;
-		margin-bottom: 10px;
-		background-color: #b5b5b54f;
-		padding: 5px;
+<style scoped>	
+	.item-name-cell {
+		display: flex;
+		justify-content: space-between;
 	}
 	
 	.item-vendor-prop {
 		display: flex;
+	}
+	
+	.item-move-btn {
+		margin-left: 10px;
 	}
 </style>

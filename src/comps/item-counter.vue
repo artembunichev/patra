@@ -38,6 +38,10 @@
 			type: Number,
 			/* no limit by default. */
 			default: Infinity,
+		},
+		"needTitle": {
+			type: Boolean,
+			default: true,
 		}
 	})
 	
@@ -127,11 +131,18 @@
 
 <template>
 	<div class="remain-container">
-		{{ props.title }}:
-		<div v-if="props.editRemainFor !== props._key">
-			<div>
+		<span
+			v-if="props.needTitle"
+			class="item-counter-store"
+		>
+			{{ props.title }}:
+		</span>
+		<div
+			v-if="props.editRemainFor !== props._key"
+		>
+			<span>
 				{{ props.count }}
-			</div>
+			</span>
 			<button
 				v-if="!props.readOnly"
 				@click="activateEditRemainMode"
@@ -187,7 +198,7 @@
 		</div>
 </template>
 
-<style scoped>
+<style>
 	.remain-container {
 		display: flex;
 		align-items: center;
@@ -195,12 +206,15 @@
 	
 	.edit-remain-container {
 		display: flex;
-		padding: 30px;
+		padding: 25px 0 0 0;
+	}
+	
+	.item-counter-store {
+		margin-right: 4px;
 	}
 	
 	.edit-remain-value {
-		font-size: 28px;
-		margin: 0 15px;
+		margin: 0 10px;
 	}
 	
 	.edit-remain-control {
@@ -208,21 +222,21 @@
 	}
 	
 	.edit-remain-button {
-		width: 25px;
-		height: 25px;
-		font-size: 18px;
+		width: 24px;
+		height: 24x;
+		font-size: 12px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
 	
 	.diff-input {
-		width: 19px;
-		height: 19px;
-		font-size: 12px;
+		width: 18px;
+		height: 18px;
+		font-size: 10px;
 		border: 1px dotted black;
 		position: absolute;
-		top: -27px;
+		top: -24px;
 		left: 0;
 		-webkit-appearance: none;
 		margin: 0;
