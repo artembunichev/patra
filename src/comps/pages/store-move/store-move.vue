@@ -1,4 +1,5 @@
 <script setup>
+	import Confirm from "../../confirm.vue"
 	import {useState} from "../../../state"
 	import {ref} from "vue"
 	
@@ -14,6 +15,7 @@
 		)
 		
 		if (isSuccess) {
+			closeMoveConfirm()
 			showDoneMsg()
 			from.value = ""
 			to.value = ""
@@ -29,13 +31,33 @@
 		isDoneMsgFrom.value = from.value
 		isDoneMsgTo.value = to.value
 	}
+	
+	var isMoveConfirmShown = ref(false)
+	var moveConfirmPrompt = ref("")
+	
+	var showMoveConfirm = ()=> {
+		/*if no actual move.*/
+		if (from.value === to.value) {
+			return
+		}
+		
+		isMoveConfirmShown.value = true
+		moveConfirmPrompt.value = (
+			`Точно перенести все товары со склада "${from.value}"`
+			+ ` на склад "${to.value}"?`
+		)
+	}
+	var closeMoveConfirm = ()=> {
+		isMoveConfirmShown.value = false
+		moveConfirmPrompt.value = ""
+	}
 </script>
 
 <template>
 	<div class="title">Перемещение по складам</div>
 	
 	<div v-if="state.stores.length > 1">
-		<span>Переместить все детали со склада</span>
+		<span>Переместить все товары со склада</span>
 		<select v-model="from">
 			<option v-for="store in state.stores" :value="store">
 				{{ store }}
@@ -47,7 +69,12 @@
 				{{ store }}
 			</option>
 		</select>
-		<button @click="move">Переместить</button>
+		<button
+			:disabled="from === to || !from || !to"
+			@click="showMoveConfirm"
+		>
+			Переместить
+		</button>
 		<div
 			v-if="isDoneMsgShown"
 			class="done-msg"
@@ -55,6 +82,12 @@
 			Все товары со склада {{isDoneMsgFrom}}
 			успешно перенесены на склад {{isDoneMsgTo}}
 		</div>
+		<Confirm
+			v-if="isMoveConfirmShown"
+			:prompt="moveConfirmPrompt"
+			@yes="move"
+			@no="closeMoveConfirm"
+		/>
 	</div>
 	<div v-else-if="state.stores.length === 1">
 		Создан только один склад - перемещать некуда.
