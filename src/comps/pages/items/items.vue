@@ -90,7 +90,7 @@
 	thead {
 		position: sticky;
 		z-index:1000;
-		top: 66px;
+		top: 71px;
 	}
 	
 	tr:nth-child(even) {

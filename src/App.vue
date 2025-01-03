@@ -103,14 +103,12 @@
 		z-index:1000;
 		width: 100%;
 		background:#ededed;
+		margin-bottom: 5px;
 	}
 	
 	.nav-btns {
 		margin-bottom: 10px;
-	}
-	
-	.nav {
-		margin-bottom: 5px;
+		padding-top: 5px;
 	}
 	
 	button {
