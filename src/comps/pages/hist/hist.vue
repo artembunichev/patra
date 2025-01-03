@@ -9,7 +9,7 @@
 		<div>История</div>
 		<div
 			v-for="entry in state.histReversed"
-			class="item-block"
+			class="hist-block"
 		>
 			<div>{{entry.when}}</div>
 			<div>{{entry.itemName}} ({{entry.store}}) {{signify(entry.diff)}}</div>
@@ -20,9 +20,14 @@
 	</div>
 </template>
 
-<style scoped>
-	.item-block {
+<style>
+	.hist-block {
 		border: 1px solid #000;
 		margin-bottom: 6px;
+		background-color: #fff;
+	}
+	
+	.hist-block:nth-child(odd) {
+		background-color: #c7c7c75d;
 	}
 </style>
