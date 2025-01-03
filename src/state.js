@@ -591,18 +591,19 @@ class State {
 		
 		var diff = newRemain - oldRemain
 		
-		this.histCommit({
-			when: new Date,
-			itemName: item.name,
-			store: store,
-			diff: diff
-		})
-		
 		if (diff < 0) {
 			this.addItemToBuyList(itemId, -diff)
 		}
 		
-		this.syncWithExstorage()
+		if (diff !== 0) {
+			this.histCommit({
+				when: new Date,
+				itemName: item.name,
+				store: store,
+				diff: diff
+			})
+			this.syncWithExstorage()
+		}
 		
 		return true
 	}
