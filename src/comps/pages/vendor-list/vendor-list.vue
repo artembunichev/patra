@@ -31,6 +31,7 @@
 		)
 		
 		if (isRenameSuccess) {
+			closeRenameConfirm()
 			quitEditMode()
 		}
 	}
@@ -124,6 +125,28 @@
 		state.addVendorComment(editCommentFor.value, editedComment.value)
 		quitCommentEditMode()
 	}
+	
+	
+	var isRenameConfirmShown = ref(false)
+	var renameConfirmPrompt = ref("")
+	var showRenameConfirm = ()=> {
+		/*if we didn't actually edit the name.*/
+		if (editModeForVendor.value === editedVendorValue.value) {
+			tryToRenameVendor()
+			return
+		}
+		
+		isRenameConfirmShown.value = true
+		renameConfirmPrompt.value = (
+			`Точно переименовать поставщика "${editModeForVendor.value}"`
+			+ ` в "${editedVendorValue.value}"?`
+		)
+	}
+	var closeRenameConfirm = ()=> {
+		isRenameConfirmShown.value = false
+		renameConfirmPrompt.value = ""
+		quitEditMode()
+	}
 </script>
 
 <template>
@@ -139,7 +162,10 @@
 					@blur="normalizeEditedVendorValue"
 				/>
 				: {{ itemsNumber }} {{ plurItem(itemsNumber) }}
-				<button class="icon-btn" @click="tryToRenameVendor">
+				<button
+					class="icon-btn"
+					@click="showRenameConfirm"
+				>
 					<img
 						src="../../../icons/tick.svg"
 					/>
@@ -233,5 +259,11 @@
 		:prompt="`Точно хотим удалить поставщика ${vendorToDelete}?`"
 		@yes="doDelete"
 		@no="closeDeleteConfirm"
+	/>
+	<Confirm
+		v-if="isRenameConfirmShown"
+		:prompt="renameConfirmPrompt"
+		@yes="tryToRenameVendor"
+		@no="closeRenameConfirm"
 	/>
 </template>
