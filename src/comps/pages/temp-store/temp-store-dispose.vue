@@ -76,7 +76,7 @@
 
 <template>
 	<div>
-		<div>Распределение товара {{ item.name }}</div>
+		<div>Распределение товара "{{ item.name }}"</div>
 		<div
 			v-if="!editRemainFor"
 		>
