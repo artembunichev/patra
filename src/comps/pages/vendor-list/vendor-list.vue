@@ -88,6 +88,42 @@
 		state.deleteVendor(vendorToDelete.value)
 		closeDeleteConfirm()
 	}
+	
+	
+	var editedComment = ref("")
+	var editCommentFor = ref("")
+	var newCommentFor = ref("")
+	
+	var isCommentConfirmShown = ref(false)
+	
+	var activateCommentEditMode = (vendor)=> {
+		editCommentFor.value = vendor
+		editedComment.value = state.vendorComments[vendor]
+	}
+	var quitCommentEditMode = ()=> {
+		editCommentFor.value = ""
+		newCommentFor.value = ""
+		isCommentConfirmShown.value = false
+	}
+	
+	var activateCreateNewCommentMode = (vendor)=> {
+		newCommentFor.value = vendor
+		activateCommentEditMode(vendor)
+	}
+	
+	var showCommentConfirm = ()=> {
+		isCommentConfirmShown.value = true
+	}
+	
+	var normalizeEditedCommentValue = ()=> {
+		editedComment.value = editedComment.value.trim()
+	}
+	
+	var changeTheComment = ()=> {
+		normalizeEditedCommentValue()
+		state.addVendorComment(editCommentFor.value, editedComment.value)
+		quitCommentEditMode()
+	}
 </script>
 
 <template>
@@ -132,6 +168,60 @@
 						src="../../../icons/trash.svg"
 					/>
 				</button>
+				<template v-if="state.vendorComments[vendor] || newCommentFor===vendor">
+					<template v-if="editCommentFor === vendor">
+						<textarea
+							placeholder="Комментарий"
+							@blur="normalizeEditedCommentValue"
+							v-model="editedComment"
+						/>
+						<button
+							class="icon-btn"
+							@click="showCommentConfirm(vendor)"
+						>
+							<img
+								src="../../../icons/tick.svg"
+							/>
+						</button>
+						<button
+							class="icon-btn"
+							@click="quitCommentEditMode"
+						>
+							<img
+								src="../../../icons/cancel.svg"
+							/>
+						</button>
+					</template>
+					
+					<div v-else>
+						<span>
+						{{state.vendorComments[vendor]}}
+						</span>
+						<button
+							class="icon-btn"
+							@click="activateCommentEditMode(vendor)"
+						>
+							<img
+								src="../../../icons/pencil.svg"
+							/>
+						</button>
+					</div>
+				</template>
+				<button
+					v-else
+					class="icon-btn"
+					@click="activateCreateNewCommentMode(vendor)"
+				>
+					<img
+						src="../../../icons/comment.svg"
+					/>
+				</button>
+				<Confirm
+					v-if="isCommentConfirmShown && editCommentFor == vendor"
+					:prompt="`Ты реально хочешь изменить комментарий?`"
+					@yes="changeTheComment"
+					@no="quitCommentEditMode"
+				/>
 			</span>
 		</li>
 	</ul>

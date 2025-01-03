@@ -33,6 +33,9 @@ class State {
 					orders: this.orders,
 					tempStore: this.tempStore
 				}
+			
+			version 2:
+				+ vendorComments (see `vendorComments`).
 		*/
 		if (data.version === 1) {
 			this.stores = data.stores
@@ -42,6 +45,17 @@ class State {
 			this.buyList = data.buyList
 			this.orders = data.orders
 			this.tempStore = data.tempStore
+		}
+		
+		if (data.version === 2) {
+			this.stores = data.stores
+			this.vendors = data.vendors
+			this.items = data.items
+			this.hist = data.hist
+			this.buyList = data.buyList
+			this.orders = data.orders
+			this.tempStore = data.tempStore
+			this.vendorComments = data.vendorComments
 		}
 	}
 	
@@ -58,7 +72,8 @@ class State {
 			buyList: this.buyList,
 			orders: this.orders,
 			tempStore: this.tempStore,
-			version: 1,
+			vendorComments: this.vendorComments,
+			version: 2,
 		}
 	}
 	
@@ -337,6 +352,24 @@ class State {
 	
 	/*list of vendor names.*/
 	vendors=[];
+	
+	/*
+		{
+			<vendor>: string,
+			...
+		}
+	*/
+	vendorComments = {}
+	
+	addVendorComment(vendor, comment) {
+		this.vendorComments[vendor] = comment
+		
+		if (comment === "") {
+			delete this.vendorComments[vendor]
+		}
+		
+		this.syncWithExstorage()
+	}
 	
 	addVendor(name){
 		this.vendors.push(name)
