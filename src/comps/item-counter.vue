@@ -1,4 +1,6 @@
 <script setup>
+	import Confirm from "./confirm.vue"
+	import {signify} from "../lib/num"
 	import {ref,watch,computed} from "vue"
 	
 	var props = defineProps({
@@ -56,7 +58,7 @@
 	
 	var isMinusDisabled = computed(()=> {
 		return (
-			remainMinusValue.value < 0
+			remainMinusValue.value <= 0
 			||
 			editRemainValue.value <= props.minValue
 			||
@@ -69,7 +71,7 @@
 	
 	var isPlusDisabled = computed(()=> {
 		return (
-			remainPlusValue.value < 0
+			remainPlusValue.value <= 0
 			||
 			editRemainValue.value >= props.maxValue
 			||
@@ -90,10 +92,14 @@
 	
 	var applyRemainPlus = ()=> {
 		editRemainValue.value += Number(remainPlusValue.value)
+		
+		showApplyConfirm(Number(remainPlusValue.value))
+		
 		emit("plus",  Number(remainPlusValue.value))
 	}
 	var applyRemainMinus = ()=> {
 		editRemainValue.value -= remainMinusValue.value
+		showApplyConfirm(-remainMinusValue.value)
 		emit("minus", remainMinusValue.value)
 	}
 	
@@ -115,6 +121,20 @@
 		if (isChangeSuccess) {
 			quitRemainEditMode()
 		}
+	}
+	
+	var isApplyConfirmShown = ref(false)
+	var applyConfirmPrompt = ref("")
+	var showApplyConfirm = (diff)=> {
+		isApplyConfirmShown.value = true
+		applyConfirmPrompt.value = (
+			`Точно применить ${signify(diff)}?`
+		)
+	}
+	var closeApplyConfirm = ()=> {
+		isApplyConfirmShown.value = false
+		applyConfirmPrompt.value = ""
+		quitRemainEditMode()
 	}
 	
 	watch(
@@ -192,21 +212,19 @@
 				</div>
 				<button
 					class="icon-btn"
-					@click="tryToChangeRemain"
-				>
-					<img
-						src="../icons/tick.svg"
-					/>
-				</button>
-				<button
-					class="icon-btn"
 					@click="quitRemainEditMode"
 				>
 					<img
-						src="../icons/cancel.svg"
+        					src="../icons/cancel.svg"
 					/>
 				</button>
 			</div>
+			<Confirm
+				v-if="isApplyConfirmShown"
+				:prompt="applyConfirmPrompt"
+				@yes="tryToChangeRemain"
+				@no="closeApplyConfirm"
+			/>
 		</div>
 		</div>
 </template>
