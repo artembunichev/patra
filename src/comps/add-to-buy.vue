@@ -39,7 +39,7 @@
 
 <template>
 	<Modal>
-		<div>Добавить {{ name }} в список закупки в кол-ве:</div>
+		<div>Добавить товар "{{ name }}" в список закупки в кол-ве:</div>
 		<input
 			type="number"
 			min="0"
