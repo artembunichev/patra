@@ -68,6 +68,27 @@
 		editedStoreValue.value = editedStoreValue.value.trim()
 	}
 	
+	var isRenameConfirmShown = ref(false)
+	var renameConfirmPrompt = ref("")
+	var showRenameConfirm = ()=> {
+		/*if we didn't actually edit the name.*/
+		if (editModeForStore.value === editedStoreValue.value) {
+			tryToRenameStore()
+			return
+		}
+		
+		isRenameConfirmShown.value = true
+		renameConfirmPrompt.value = (
+			`Точно переименовать склад "${editModeForStore.value}"`
+			+ ` в "${editedStoreValue.value}"?`
+		)
+	}
+	var closeRenameConfirm = ()=> {
+		isRenameConfirmShown.value = false
+		renameConfirmPrompt.value = ""
+		quitEditMode()
+	}
+	
 	var tryToRenameStore = ()=> {
 		normalizeEditedStoreValue()
 		
@@ -79,6 +100,7 @@
 		)
 		
 		if (isRenameSuccess) {
+			closeRenameConfirm()
 			quitEditMode()
 		}
 	}
@@ -105,7 +127,7 @@
 							/>
 							<button
 								class="icon-btn"
-								@click="tryToRenameStore"
+								@click="showRenameConfirm"
 							>
 								<img
 									src="../../../icons/tick.svg"
@@ -148,6 +170,12 @@
 			:prompt="deletePrompt"
 			@yes="doDelete"
 			@no="closeDeleteConfirm"
+		/>
+		<Confirm
+			v-if="isRenameConfirmShown"
+			:prompt="renameConfirmPrompt"
+			@yes="tryToRenameStore"
+			@no="closeRenameConfirm"
 		/>
 		<button
 			v-if="state.stores.length > 1"
