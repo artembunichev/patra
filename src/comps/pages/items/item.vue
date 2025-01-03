@@ -328,7 +328,7 @@
 						@click="tryChangeItemName"
 					>
 						<img
-							src="../../../icons/pencil.svg"
+							src="../../../icons/tick.svg"
 						/>
 					</button>
 					<button
