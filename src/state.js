@@ -627,7 +627,7 @@ class State {
 		var item = this.getItemById(id)
 		return Object.keys(item.remain).reduce(
 			(acc,store)=> {
-				return acc += item.remain[store]
+				return acc += Number(item.remain[store])
 			},
 			0
 		)
